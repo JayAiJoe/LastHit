@@ -1,0 +1,25 @@
+name: dev CI
+
+env:
+  GODOT_VERSION: 3.4.2
+
+on: 
+  push:
+    branches: [ dev ]
+  pull_request:
+    branches: [ dev ]
+  workflow_dispatch:
+
+
+jobs:
+  execute-gut:
+    name: Run GUT tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Docker test
+        uses: ceceppa/godot-gut-ci@master
+        with:
+          godot_version: 3.4.2
+          unit_test: res://test/unit
