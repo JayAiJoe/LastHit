@@ -4,22 +4,15 @@ var Dice = preload("res://src/Dice/Dice.tscn")
 var radius = 75
 var d_num = 5
 var selected_dice = null
-var entered = false
+var dice_distance = 100
+var dice_size = 64
 
 func _ready():
+	reset()
+	
+func reset():
 	for i in range(d_num):
 		var dice = Dice.instance()
 		dice.index = i
-		dice.rest_point = global_position + Vector2(randi()%250-90, randi()%250-90)
+		dice.rest_point = global_position + Vector2(i*dice_distance, -dice_size/2)
 		add_child(dice)
-		
-func _process(delta):
-	if Input.is_mouse_button_pressed(BUTTON_LEFT):
-		if selected_dice != null and entered:
-				selected_dice.rest_point = get_global_mouse_position()
-
-func _on_Area2D_mouse_entered():
-	entered = true
-
-func _on_Area2D_mouse_exited():
-	entered = false

@@ -1,8 +1,10 @@
 extends Position2D
 
 var radius = 75
+var type = 1
 
 signal trigger
+
 
 func _ready():
 	pass
@@ -20,4 +22,7 @@ func deselect():
 
 func trigger(value1, value2):
 	emit_signal("trigger", value1, value2)
+	if type == 1:
+		remove_from_group("DropZones")
+		queue_free()
 	

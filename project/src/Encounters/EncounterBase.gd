@@ -12,6 +12,7 @@ func _ready():
 	set_max_hp(30)
 	set_current_hp(30)
 	$DropZone.connect("trigger", self, "take_hit")
+	$DropZone.type = 2
 	$LifeBar/Life.set_text(str(current_hp) + "/" + str(max_hp))
 
 func set_zone_radius(radius):
@@ -30,6 +31,7 @@ func set_current_hp(hp):
 
 func set_armor_class(ac):
 	armor_class = ac
+	$ArmorClass/Armor.text = str(ac)
 
 func take_hit(roll, dmg):
 	if roll > armor_class:

@@ -2,10 +2,9 @@ extends Node2D
 
 var selected = false
 var rest_point
-var rest_nodes = []
 var value = -1
 var index = -1
-
+var draggable = true
 
 var base_dmg = 5 #set to player stats
 onready var tray = get_parent()
@@ -13,7 +12,6 @@ onready var tray = get_parent()
 
 func _ready():
 	randomize()
-	rest_nodes = get_tree().get_nodes_in_group("DropZones")
 	value = roll(1,20)
 	$Number.text = str(value)
 
@@ -24,7 +22,7 @@ func roll(minimum, maximum):
 
 func _on_Area2D_input_event(viewport, event, shape_idx):
 	if Input.is_action_pressed("left_click"):
-		if tray.selected_dice == null:
+		if draggable and tray.selected_dice == null:
 			tray.selected_dice = self
 			selected = true
 
@@ -36,20 +34,22 @@ func _physics_process(delta):
 			rotation = lerp_angle(rotation, angle, 0.1)
 	else:
 		global_position = lerp(global_position, rest_point, 5*delta)
-		#rotation = lerp_angle(rotation, 0, 5*delta)
+		rotation = lerp_angle(rotation, 0, 5*delta)
 
 func _input(event):
 	if event is InputEventMouseButton:
-		if event.button_index == BUTTON_LEFT and not event.pressed:
+		if draggable and event.button_index == BUTTON_LEFT and not event.pressed:
 			
 			if tray.selected_dice != null and tray.selected_dice.index == index:
 				tray.selected_dice = null
 				selected = false
 			
-			for node in rest_nodes:
+			for node in get_tree().get_nodes_in_group("DropZones"):
 				var distance = global_position.distance_to(node.global_position)
 				if distance <= node.radius:
 					rest_point = node.global_position
 					node.trigger(value, base_dmg)
-					queue_free()
+					draggable = false
+					if node.type == 2:
+						queue_free()
 

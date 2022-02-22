@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://src/Encounters/EncounterBase.gd" type="Script" id=1]
 [ext_resource path="res://src/General/DropZone.tscn" type="PackedScene" id=2]
 [ext_resource path="res://src/Assets/slime.png" type="Texture" id=3]
 [ext_resource path="res://src/Assets/healthbar_empty.png" type="Texture" id=4]
 [ext_resource path="res://src/Assets/healthbar.png" type="Texture" id=5]
+[ext_resource path="res://src/Assets/armor.png" type="Texture" id=6]
 
 [node name="EncounterBase" type="Node2D"]
 script = ExtResource( 1 )
@@ -34,12 +35,30 @@ __meta__ = {
 
 [node name="Life" type="Label" parent="LifeBar"]
 modulate = Color( 0, 0, 0, 1 )
-margin_left = 451.429
-margin_top = 25.7144
-margin_right = 491.429
-margin_bottom = 39.7144
+margin_left = 151.429
+margin_top = 25.7143
+margin_right = 201.429
+margin_bottom = 39.7143
 rect_scale = Vector2( 5, 5 )
 text = "0/0"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ArmorClass" type="Sprite" parent="."]
+position = Vector2( -120, -64 )
+scale = Vector2( 0.203125, 0.203125 )
+texture = ExtResource( 6 )
+
+[node name="Armor" type="Label" parent="ArmorClass"]
+margin_left = -80.0
+margin_top = -60.0
+margin_right = -64.0
+margin_bottom = -44.0
+rect_scale = Vector2( 10, 10 )
+text = "5"
+align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
