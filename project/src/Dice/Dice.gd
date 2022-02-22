@@ -22,9 +22,6 @@ func roll(minimum, maximum):
 
 func _on_Area2D_input_event(viewport, event, shape_idx):
 	if Input.is_action_pressed("left_click"):
-		for item in get_tree().get_nodes_in_group("Draggables"):
-			if item.index != index:
-				item.selected = false
 		if tray.selected_dice == null:
 			tray.selected_dice = self
 			selected = true
