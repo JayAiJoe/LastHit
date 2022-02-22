@@ -4,6 +4,7 @@ var zone_radius = 50
 var armor_class = 1
 var max_hp = 5
 var current_hp = 5
+var crit_multiplier = 2
 
 func _ready():
 	set_zone_radius(120)
@@ -30,16 +31,21 @@ func set_current_hp(hp):
 func set_armor_class(ac):
 	armor_class = ac
 
-func take_hit(hit):
-	if hit > armor_class:
-		set_current_hp(current_hp - 5)
+func take_hit(roll, dmg):
+	if roll > armor_class:
+		if roll == 20:
+			set_current_hp(current_hp - dmg*crit_multiplier)
+		else:
+			set_current_hp(current_hp - dmg)
 		play_hit_animation()
 
 func play_hit_animation():
 	$Sprite.modulate = Color.webmaroon
-	yield(get_tree().create_timer(0.2), "timeout")
+	$Timer.wait_time = 0.2
+	$Timer.start()
+	yield($Timer, "timeout")
 	$Sprite.modulate = Color.white
-	yield(get_tree().create_timer(0.2), "timeout")
+	yield($Timer, "timeout")
 	$Sprite.modulate = Color.webmaroon
-	yield(get_tree().create_timer(0.2), "timeout")
+	yield($Timer, "timeout")
 	$Sprite.modulate = Color.white

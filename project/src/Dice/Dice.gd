@@ -6,6 +6,8 @@ var rest_nodes = []
 var value = -1
 var index = -1
 
+
+var base_dmg = 5 #set to player stats
 onready var tray = get_parent()
 
 
@@ -48,6 +50,6 @@ func _input(event):
 				var distance = global_position.distance_to(node.global_position)
 				if distance <= node.radius:
 					rest_point = node.global_position
-					node.trigger(value)
+					node.trigger(value, base_dmg)
 					queue_free()
 

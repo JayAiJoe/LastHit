@@ -18,6 +18,6 @@ func select():
 func deselect():
 	modulate = Color.white
 
-func trigger(value):
-	emit_signal("trigger", value)
+func trigger(value1, value2):
+	emit_signal("trigger", value1, value2)
 	
