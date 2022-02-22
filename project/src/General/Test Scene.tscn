@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://src/General/DropZone.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/Dice/DiceTray.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/Encounters/EncounterBase.tscn" type="PackedScene" id=3]
+
+[node name="Test Scene" type="Node2D"]
+
+[node name="DropZone2" parent="." instance=ExtResource( 1 )]
+position = Vector2( 158, 108 )
+
+[node name="DropZone" parent="." instance=ExtResource( 1 )]
+position = Vector2( 484, 108 )
+
+[node name="EncounterBase" parent="." instance=ExtResource( 3 )]
+position = Vector2( 884, 128 )
+
+[node name="DiceTray" parent="." instance=ExtResource( 2 )]
+position = Vector2( 506, 417 )
