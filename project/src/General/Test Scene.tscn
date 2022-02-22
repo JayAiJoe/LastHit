@@ -7,13 +7,13 @@
 [node name="Test Scene" type="Node2D"]
 
 [node name="DropZone2" parent="." instance=ExtResource( 1 )]
-position = Vector2( 158, 108 )
+position = Vector2( 156, 139 )
 
 [node name="DropZone" parent="." instance=ExtResource( 1 )]
-position = Vector2( 484, 108 )
+position = Vector2( 506, 139 )
 
 [node name="EncounterBase" parent="." instance=ExtResource( 3 )]
-position = Vector2( 884, 128 )
+position = Vector2( 884, 157 )
 
 [node name="DiceTray" parent="." instance=ExtResource( 2 )]
 position = Vector2( 506, 417 )

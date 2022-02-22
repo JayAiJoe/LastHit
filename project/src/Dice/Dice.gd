@@ -44,8 +44,10 @@ func _input(event):
 				tray.selected_dice = null
 				selected = false
 			
-			#for node in rest_nodes:
-			#	var distance = global_position.distance_to(node.global_position)
-			#	if distance <= node.radius:
-			#		rest_point = node.global_position
+			for node in rest_nodes:
+				var distance = global_position.distance_to(node.global_position)
+				if distance <= node.radius:
+					rest_point = node.global_position
+					node.trigger(value)
+					queue_free()
 

@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://src/Encounters/EncounterBase.gd" type="Script" id=1]
 [ext_resource path="res://src/General/DropZone.tscn" type="PackedScene" id=2]
 [ext_resource path="res://src/Assets/slime.png" type="Texture" id=3]
+[ext_resource path="res://src/Assets/healthbar_empty.png" type="Texture" id=4]
+[ext_resource path="res://src/Assets/healthbar.png" type="Texture" id=5]
 
 [node name="EncounterBase" type="Node2D"]
 script = ExtResource( 1 )
@@ -13,3 +15,28 @@ script = ExtResource( 1 )
 position = Vector2( 0, -20 )
 scale = Vector2( 0.276983, 0.276983 )
 texture = ExtResource( 3 )
+
+[node name="LifeBar" type="TextureProgress" parent="."]
+margin_left = -87.0
+margin_top = -132.0
+margin_right = 402.0
+margin_bottom = -12.0
+rect_scale = Vector2( 0.35, 0.35 )
+value = 10.0
+texture_over = ExtResource( 4 )
+texture_progress = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Life" type="Label" parent="LifeBar"]
+modulate = Color( 0, 0, 0, 1 )
+margin_left = 451.429
+margin_top = 25.7144
+margin_right = 491.429
+margin_bottom = 39.7144
+rect_scale = Vector2( 5, 5 )
+text = "0/0"
+__meta__ = {
+"_edit_use_anchors_": false
+}

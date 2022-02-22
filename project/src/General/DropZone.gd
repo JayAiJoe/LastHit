@@ -2,6 +2,8 @@ extends Position2D
 
 var radius = 75
 
+signal trigger
+
 func _ready():
 	pass
 
@@ -15,4 +17,7 @@ func select():
 
 func deselect():
 	modulate = Color.white
+
+func trigger(value):
+	emit_signal("trigger", value)
 	
