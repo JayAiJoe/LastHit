@@ -78,6 +78,7 @@ __meta__ = {
 [node name="AnimatedSprite" type="AnimatedSprite" parent="HBoxContainer/VBoxContainer/Sprite"]
 scale = Vector2( 3, 3 )
 frames = SubResource( 7 )
+frame = 3
 playing = true
 centered = false
 offset = Vector2( 5, 5 )

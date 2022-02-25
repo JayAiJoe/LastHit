@@ -6,7 +6,7 @@ var value = -1
 var index = -1
 var draggable = true
 
-var base_dmg = 5 #set to player stats
+var base_dmg = 15 #set to player stats
 onready var tray = get_parent()
 
 

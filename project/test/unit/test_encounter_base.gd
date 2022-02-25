@@ -12,7 +12,11 @@ func before_each():
 func after_each():
 	_encounter.free()
 
-
+func test_initiative():
+	_encounter.roll_initiative(1,20)
+	var res = _encounter.initiative
+	assert_true(res>0 and res <21, "roll should be 1-20")
+	
 func test_set_zone_radius():
 	_encounter.set_zone_radius(25)
 	assert_eq(_encounter.get_node("DropZone").radius, 25, "The radius should be 25")

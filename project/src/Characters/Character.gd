@@ -1,16 +1,58 @@
 extends Node2D
 
-var hp = 100
-var max_hp = 100
+var max_hp = 20
+var current_hp = 20
+var crit_multiplier = 2
+var initiative = 1
+
 var shielded = false
 
+signal end_turn
 
 func _ready():
-	pass 
+	randomize()
+	set_max_hp(30)
+	set_current_hp(30)
+	$LifeBar/Life.set_text(str(current_hp) + "/" + str(max_hp))
+	roll_initiative(1, 1)
+	for a in get_tree().get_nodes_in_group("Actions"):
+		a.connect("trigger", self, "perform_action")
 
+		
 
-func take_damage(amount):
-	if shielded:
-		amount/=2
-	hp = max(0, hp-amount)
+func roll_initiative(minimum, maximum):
+	initiative = randi() % (maximum-minimum+1) + minimum
 
+func set_max_hp(hp):
+	max_hp = hp
+	$LifeBar.max_value = hp
+
+func set_current_hp(hp):
+	current_hp = max(min(hp, max_hp), 0)
+	$LifeBar.value = current_hp
+	$LifeBar/Life.set_text(str(current_hp) + "/" + str(max_hp))
+
+func take_hit(dmg):
+	if dmg > 0:
+		set_current_hp(current_hp - dmg)
+		play_hit_animation()
+
+func play_hit_animation():
+	$Timer.wait_time = 0.2
+	$Timer.start()
+	$AnimatedSprite.modulate = Color.webmaroon
+	$AnimatedSprite.playing = false
+	yield($Timer, "timeout")
+	$AnimatedSprite.modulate = Color.white
+	yield($Timer, "timeout")
+	$AnimatedSprite.modulate = Color.webmaroon
+	yield($Timer, "timeout")
+	$AnimatedSprite.modulate = Color.white
+	$AnimatedSprite.playing = true
+
+func perform_action(roll, dmg):
+	print("Hero turn: " + str(roll))
+	emit_signal("end_turn")
+	
+func play_turn():
+	yield(self, "end_turn")

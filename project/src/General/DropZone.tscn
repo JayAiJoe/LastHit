@@ -2,5 +2,5 @@
 
 [ext_resource path="res://src/General/DropZone.gd" type="Script" id=1]
 
-[node name="DropZone" type="Position2D" groups=["DropZones"]]
+[node name="DropZone" type="Position2D" groups=["Actions", "DropZones"]]
 script = ExtResource( 1 )
