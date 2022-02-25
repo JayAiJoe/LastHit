@@ -1,6 +1,6 @@
 extends Position2D
 
-var radius = 75
+var radius = 35
 var type = 1
 
 signal trigger
