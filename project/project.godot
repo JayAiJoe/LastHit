@@ -21,7 +21,7 @@ _global_script_class_icons={
 [application]
 
 config/name="LastHitWonder"
-run/main_scene="res://src/General/Test Scene.tscn"
+run/main_scene="res://src/General/CombatMaster.tscn"
 config/icon="res://icon.png"
 
 [display]

@@ -20,6 +20,7 @@ func select():
 func deselect():
 	modulate = Color.white
 
+## called when a die is released on this drop zone
 func trigger(value1, value2):
 	emit_signal("trigger", value1, value2)
 	if type == 1:

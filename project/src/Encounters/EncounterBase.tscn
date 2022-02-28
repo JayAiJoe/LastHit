@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://src/Encounters/EncounterBase.gd" type="Script" id=1]
 [ext_resource path="res://src/General/DropZone.tscn" type="PackedScene" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://src/Assets/healthbar_empty.png" type="Texture" id=4]
 [ext_resource path="res://src/Assets/healthbar.png" type="Texture" id=5]
 [ext_resource path="res://src/Assets/armor.png" type="Texture" id=6]
+[ext_resource path="res://src/Assets/slime.png" type="Texture" id=7]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -99,5 +100,9 @@ __meta__ = {
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 scale = Vector2( 10, 10 )
 frames = SubResource( 7 )
-frame = 4
+frame = 1
 playing = true
+
+[node name="StaticSprite" type="Sprite" parent="."]
+visible = false
+texture = ExtResource( 7 )

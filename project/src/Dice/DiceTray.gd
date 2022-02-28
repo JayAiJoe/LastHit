@@ -9,7 +9,8 @@ var dice_size = 64
 
 func _ready():
 	reset()
-	
+
+
 func reset():
 	for i in range(d_num):
 		var dice = Dice.instance()

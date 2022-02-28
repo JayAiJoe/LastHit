@@ -7,6 +7,8 @@ var initiative = 1
 
 var shielded = false
 
+var combat_master = null
+
 signal end_turn
 
 func _ready():
@@ -17,8 +19,7 @@ func _ready():
 	roll_initiative(1, 1)
 	for a in get_tree().get_nodes_in_group("Actions"):
 		a.connect("trigger", self, "perform_action")
-
-		
+	combat_master = get_parent()
 
 func roll_initiative(minimum, maximum):
 	initiative = randi() % (maximum-minimum+1) + minimum
@@ -50,9 +51,16 @@ func play_hit_animation():
 	$AnimatedSprite.modulate = Color.white
 	$AnimatedSprite.playing = true
 
+## gets called on turn start, waits until a die is played
+func play_turn():
+	yield(self, "end_turn")
+
+## gets called when a die is played
 func perform_action(roll, dmg):
 	print("Hero turn: " + str(roll))
 	emit_signal("end_turn")
 	
-func play_turn():
-	yield(self, "end_turn")
+func get_sprite_path():
+	return $StaticSprite.texture.resource_path
+	
+

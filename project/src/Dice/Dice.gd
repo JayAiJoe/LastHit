@@ -6,7 +6,7 @@ var value = -1
 var index = -1
 var draggable = true
 
-var base_dmg = 15 #set to player stats
+var base_dmg = 10 #set to player stats
 onready var tray = get_parent()
 
 
@@ -18,7 +18,6 @@ func _ready():
 func roll(minimum, maximum):
 	var res = randi() % (maximum-minimum+1) + minimum
 	return res
-
 
 func _on_Area2D_input_event(viewport, event, shape_idx):
 	if Input.is_action_pressed("left_click"):
