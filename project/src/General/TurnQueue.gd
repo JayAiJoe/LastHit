@@ -21,13 +21,13 @@ func _ready():
 		
 func initialize():
 	characters = get_tree().get_nodes_in_group("Characters")
+	print(characters)
 	characters.sort_custom(self, 'sort_initiative')
 	active_character = characters[index]
 	for c in characters:
 		var turnCard = TurnCard.instance()
 		turnCard.get_node("TextureRect").texture = load(c.get_sprite_path())
 		$Visual.add_child(turnCard)
-
 
 static func sort_initiative(a, b) -> bool:
 	return a.initiative > b.initiative

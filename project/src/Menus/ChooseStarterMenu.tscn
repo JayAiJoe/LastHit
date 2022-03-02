@@ -1,0 +1,140 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://src/Creatures/Card.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/Menus/ChooseStarterMenu.gd" type="Script" id=2]
+[ext_resource path="res://src/Assets/card.png" type="Texture" id=3]
+[ext_resource path="res://src/Creatures/CreatureChoice.gd" type="Script" id=4]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 155, 90 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 28, 8 )
+
+[node name="ChooseStarterMenu" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="Creature0" type="Area2D" parent="."]
+position = Vector2( 182, 100 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Frame" type="Sprite" parent="Creature0"]
+visible = false
+position = Vector2( 155, 100 )
+scale = Vector2( 0.45, 0.2 )
+texture = ExtResource( 3 )
+
+[node name="Card" parent="Creature0" instance=ExtResource( 1 )]
+margin_right = 310.0
+rect_min_size = Vector2( 310, 200 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Creature0"]
+position = Vector2( 155, 101 )
+shape = SubResource( 1 )
+
+[node name="Creature1" type="Area2D" parent="."]
+position = Vector2( 532, 100 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Frame" type="Sprite" parent="Creature1"]
+visible = false
+position = Vector2( 156, 99 )
+scale = Vector2( 0.45, 0.2 )
+texture = ExtResource( 3 )
+
+[node name="Card" parent="Creature1" instance=ExtResource( 1 )]
+visible = false
+margin_right = 310.0
+rect_min_size = Vector2( 310, 200 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Creature1"]
+position = Vector2( 155, 101 )
+shape = SubResource( 1 )
+
+[node name="Creature2" type="Area2D" parent="."]
+position = Vector2( 27, 300 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Frame" type="Sprite" parent="Creature2"]
+visible = false
+position = Vector2( 157, 100 )
+scale = Vector2( 0.45, 0.2 )
+texture = ExtResource( 3 )
+
+[node name="Card" parent="Creature2" instance=ExtResource( 1 )]
+visible = false
+margin_right = 310.0
+rect_min_size = Vector2( 310, 200 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Creature2"]
+position = Vector2( 155, 101 )
+shape = SubResource( 1 )
+
+[node name="Creature3" type="Area2D" parent="."]
+position = Vector2( 357, 300 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Frame" type="Sprite" parent="Creature3"]
+visible = false
+position = Vector2( 152, 102 )
+scale = Vector2( 0.45, 0.2 )
+texture = ExtResource( 3 )
+
+[node name="Card" parent="Creature3" instance=ExtResource( 1 )]
+visible = false
+margin_right = 310.0
+rect_min_size = Vector2( 310, 200 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Creature3"]
+position = Vector2( 155, 101 )
+shape = SubResource( 1 )
+
+[node name="Creature4" type="Area2D" parent="."]
+position = Vector2( 687, 300 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Frame" type="Sprite" parent="Creature4"]
+visible = false
+position = Vector2( 153, 102 )
+scale = Vector2( 0.45, 0.2 )
+texture = ExtResource( 3 )
+
+[node name="Card" parent="Creature4" instance=ExtResource( 1 )]
+visible = false
+margin_right = 310.0
+rect_min_size = Vector2( 310, 200 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Creature4"]
+position = Vector2( 155, 101 )
+shape = SubResource( 1 )
+
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2( -65, 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2( 584, 550 )
+shape = SubResource( 2 )
+
+[node name="Label" type="Label" parent="Area2D"]
+margin_left = 560.0
+margin_top = 543.0
+margin_right = 609.0
+margin_bottom = 559.0
+text = "Accept"
+
+[connection signal="input_event" from="Creature0" to="Creature0" method="click"]
+[connection signal="input_event" from="Area2D" to="." method="accept_starters"]

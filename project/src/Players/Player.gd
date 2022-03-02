@@ -1,5 +1,11 @@
 extends Node2D
 
+class_name Player
+
+var player_name
+
+var creatures
+
 var max_hp = 20
 var current_hp = 20
 var crit_multiplier = 2
@@ -20,6 +26,10 @@ func _ready():
 	for a in get_tree().get_nodes_in_group("Actions"):
 		a.connect("trigger", self, "perform_action")
 	combat_master = get_parent()
+	
+func _init(_name):
+	player_name = _name
+	creatures = [Creature.new(), Creature.new(), Creature.new()]
 
 func roll_initiative(minimum, maximum):
 	initiative = randi() % (maximum-minimum+1) + minimum

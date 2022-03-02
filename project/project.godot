@@ -9,12 +9,24 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Node",
+"class": "Creature",
+"language": "GDScript",
+"path": "res://src/Creatures/Creature.gd"
+}, {
+"base": "Node2D",
+"class": "Player",
+"language": "GDScript",
+"path": "res://src/Players/Player.gd"
+}, {
 "base": "Node2D",
 "class": "TurnQueue",
 "language": "GDScript",
 "path": "res://src/General/TurnQueue.gd"
 } ]
 _global_script_class_icons={
+"Creature": "",
+"Player": "",
 "TurnQueue": ""
 }
 
@@ -24,6 +36,10 @@ config/name="LastHitWonder"
 run/main_scene="res://src/General/CombatMaster.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+Global="*res://src/General/Global.gd"
+
 [display]
 
 window/stretch/mode="viewport"
@@ -31,7 +47,7 @@ window/stretch/aspect="expand"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/gut/plugin.cfg" )
+enabled=PoolStringArray(  )
 
 [input]
 
