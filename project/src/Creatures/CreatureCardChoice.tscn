@@ -9,7 +9,7 @@ extents = Vector2( 164.444, 97.5 )
 
 [node name="CreatureCardChoice" type="Area2D"]
 position = Vector2( -11, -2 )
-scale = Vector2( 0.9, 0.9 )
+scale = Vector2( 0.95, 0.95 )
 script = ExtResource( 2 )
 __meta__ = {
 "_edit_group_": true

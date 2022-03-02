@@ -30,7 +30,19 @@ func initialize():
 
 
 static func sort_initiative(a, b) -> bool:
-	return a.initiative > b.initiative
+	var x
+	var y
+	if "player" in a:
+		x = a.player.initiative
+	else:
+		x = a.creature.initiative
+	
+	if "player" in b:
+		y = b.player.initiative
+	else:
+		y = b.creature.initiative
+	
+	return x > y
 
 func play_turn():
 	active_character = characters[index]	

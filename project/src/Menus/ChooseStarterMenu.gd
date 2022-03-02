@@ -1,9 +1,13 @@
 extends Node2D
 
 var cards = []
+var choices
 
 func _ready():
-	pass # Replace with function body.
+	choices = [-1,0,1,2,3,4]
+	choices.shuffle()
+	for i in range(5):
+		get_child(i).get_node("Card").set_creature(str(choices[i]))
 
 func select_starter(index):
 	if index in cards:

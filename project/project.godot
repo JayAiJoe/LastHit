@@ -9,12 +9,24 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Node",
+"class": "Creature",
+"language": "GDScript",
+"path": "res://src/Creatures/Creature.gd"
+}, {
+"base": "Node",
+"class": "Player",
+"language": "GDScript",
+"path": "res://src/Players/Player.gd"
+}, {
 "base": "Node2D",
 "class": "TurnQueue",
 "language": "GDScript",
 "path": "res://src/General/TurnQueue.gd"
 } ]
 _global_script_class_icons={
+"Creature": "",
+"Player": "",
 "TurnQueue": ""
 }
 
