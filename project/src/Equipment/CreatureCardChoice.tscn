@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://src/Equipment/Card.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/Assets/card.png" type="Texture" id=2]
+[ext_resource path="res://src/Equipment/CreatureCardChoice.gd" type="Script" id=3]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 164.444, 97.5 )
+
+[node name="CreatureCardChoice" type="Area2D"]
+position = Vector2( -11, -2 )
+scale = Vector2( 0.9, 0.9 )
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 10, 0 )
+shape = SubResource( 1 )
+
+[node name="Frame" type="Sprite" parent="."]
+position = Vector2( 9.44444, -0.555555 )
+scale = Vector2( 0.486018, 0.21355 )
+texture = ExtResource( 2 )
+
+[node name="Card" parent="." instance=ExtResource( 1 )]
+margin_left = -155.0
+margin_top = -100.0
+margin_right = 175.0
+margin_bottom = 100.0
+
+[connection signal="gui_input" from="Card" to="." method="click"]

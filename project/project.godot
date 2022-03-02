@@ -24,6 +24,10 @@ config/name="LastHitWonder"
 run/main_scene="res://src/General/CombatMaster.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+Global="*res://src/General/Global.gd"
+
 [display]
 
 window/stretch/mode="viewport"
