@@ -1,0 +1,40 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://src/Creatures/CreatureCardChoice.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/Menus/ChooseStarterMenu.gd" type="Script" id=2]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 26, 10 )
+
+[node name="ChooseStarterMenu" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="CreatureCardChoice" parent="." instance=ExtResource( 1 )]
+position = Vector2( 309, 193 )
+
+[node name="CreatureCardChoice2" parent="." instance=ExtResource( 1 )]
+position = Vector2( 662, 192 )
+
+[node name="CreatureCardChoice3" parent="." instance=ExtResource( 1 )]
+position = Vector2( 174, 413 )
+
+[node name="CreatureCardChoice4" parent="." instance=ExtResource( 1 )]
+position = Vector2( 504, 409 )
+
+[node name="CreatureCardChoice5" parent="." instance=ExtResource( 1 )]
+position = Vector2( 844, 407 )
+
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2( 516, 560 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource( 1 )
+
+[node name="Label" type="Label" parent="Area2D"]
+margin_left = -21.0
+margin_top = -6.0
+margin_right = 23.0
+margin_bottom = 8.0
+text = "Accept"
+
+[connection signal="input_event" from="Area2D" to="." method="accept_starters"]
