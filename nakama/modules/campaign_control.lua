@@ -1,4 +1,7 @@
-local world_control = {}
+-- Module that controls the game world. The world's state is updated every `tickrate` in the
+-- `match_loop()` function.
+
+local campaign_control = {}
 
 local nk = require("nakama")
 
@@ -66,7 +69,7 @@ end
 
 -- When the match is initialized. Creates empty tables in the game state that will be populated by
 -- clients.
-function world_control.match_init(_, _)
+function campaign_control.match_init(_, _)
     local gamestate = {
         presences = {},
         inputs = {},
@@ -75,14 +78,14 @@ function world_control.match_init(_, _)
         colors = {},
         names = {}
     }
-    local tickrate = 2
-    local label = "Social world"
+    local tickrate = 10
+    local label = "Campaign"
     return gamestate, tickrate, label
 end
 
 -- When someone tries to join the match. Checks if someone is already logged in and blocks them from
 -- doing so if so.
-function world_control.match_join_attempt(_, _, _, state, presence, _)
+function campaign_control.match_join_attempt(_, _, _, state, presence, _)
     if state.presences[presence.user_id] ~= nil then
         return state, false, "User already logged in."
     end
@@ -91,7 +94,7 @@ end
 
 -- When someone does join the match. Initializes their entries in the game state tables with dummy
 -- values until they spawn in.
-function world_control.match_join(_, dispatcher, _, state, presences)
+function campaign_control.match_join(_, dispatcher, _, state, presences)
     for _, presence in ipairs(presences) do
         state.presences[presence.user_id] = presence
 
@@ -115,7 +118,7 @@ end
 
 -- When someone leaves the match. Clears their entries in the game state tables, but saves their
 -- position to storage for next time.
-function world_control.match_leave(_, _, _, state, presences)
+function campaign_control.match_leave(_, _, _, state, presences)
     for _, presence in ipairs(presences) do
         local new_objects = {
             {
@@ -139,7 +142,7 @@ end
 
 -- Called `tickrate` times per second. Handles client messages and sends game state updates. Uses
 -- boiler plate commands from the command pattern except when specialization is required.
-function world_control.match_loop(_, dispatcher, _, state, messages)
+function campaign_control.match_loop(_, dispatcher, _, state, messages)
     for _, message in ipairs(messages) do
         local op_code = message.op_code
 
@@ -214,7 +217,7 @@ function world_control.match_loop(_, dispatcher, _, state, messages)
 end
 
 -- Server is shutting down. Save positions of all existing characters to storage.
-function world_control.match_terminate(_, _, _, state, _)
+function campaign_control.match_terminate(_, _, _, state, _)
     local new_objects = {}
     for k, position in pairs(state.positions) do
         table.insert(
@@ -233,4 +236,8 @@ function world_control.match_terminate(_, _, _, state, _)
     return state
 end
 
-return world_control
+function campaign_control.match_signal(_, _, _, state, data)
+    return state, "signal received: " .. data
+end
+
+return campaign_control

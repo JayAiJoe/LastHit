@@ -3,6 +3,7 @@ extends Node
 const KEY := "last_hit"
 
 signal presences_changed
+signal chat_message_received(username, text)
 
 var _client := Nakama.create_client(KEY, "127.0.0.1", 7350, "http")
 var _socket: NakamaSocket setget _no_set
@@ -12,6 +13,8 @@ var _storage_worker: StorageWorker
 
 var error_message := "" setget _no_set, _get_error_message
 var presences := {} setget _no_set
+var _campaign_id: String setget _no_set
+var _channel_id: String setget _no_set
 
 func _no_set(_value) -> void:
 	pass
@@ -25,7 +28,7 @@ func get_user_id() -> String:
 	return ""
 
 
-
+#Authentication
 func register_async(email: String, password: String) -> int:
 	var result: int = yield(_authenticator.register_async(email, password), "completed")
 	if result == OK:
@@ -39,7 +42,7 @@ func login_async(email: String, password: String) -> int:
 	return result
 
 
-
+#Server Connection
 func connect_to_server_async() -> int:
 	_socket = Nakama.create_socket_from(_client)
 	var result: NakamaAsyncResult = yield(_socket.connect_async(_authenticator.session), "completed")
@@ -81,4 +84,43 @@ func _on_NamakaSocket_received_channel_message(message: NakamaAPI.ApiChannelMess
 	if message.code != 0:
 		return
 	var content: Dictionary = JSON.parse(message.content).result
-	emit_signal("chat_message_received", message.sender_id, content.msg)
+	emit_signal("chat_message_received", message.username.split("@")[0], content.msg)
+
+
+#Matchmaking
+func join_campaign_async() -> int:
+	if not _socket:
+		error_message = "Server not connected."
+		return ERR_UNAVAILABLE
+
+	if not _campaign_id:
+		var campaign: NakamaAPI.ApiRpc = yield(_client.rpc_async(_authenticator.session, "get_campaign_id", ""), "completed")
+		var parsed_result := _exception_handler.parse_exception(campaign)
+		if parsed_result != OK:
+			return parsed_result
+		_campaign_id = campaign.payload
+
+	#Chat
+	var match_join_result: NakamaRTAPI.Match = yield(_socket.join_match_async(_campaign_id), "completed")
+	var parsed_result := _exception_handler.parse_exception(match_join_result)
+	if parsed_result == OK:
+		for presence in match_join_result.presences:
+			presences[presence.user_id] = presence
+
+		var chat_join_result: NakamaRTAPI.Channel = yield(_socket.join_chat_async("campaign", NakamaSocket.ChannelType.Room, false, false), "completed")
+		parsed_result = _exception_handler.parse_exception(chat_join_result)
+		_channel_id = chat_join_result.id
+	return parsed_result
+
+#Chat
+func send_text_async(text: String) -> int:
+	if not _socket:
+		return ERR_UNAVAILABLE
+	var data := {"msg": text}
+	var message_response: NakamaRTAPI.ChannelMessageAck = yield(_socket.write_chat_message_async(_channel_id, data), "completed")
+
+	var parsed_result := _exception_handler.parse_exception(message_response)
+	if parsed_result != OK:
+		emit_signal("chat_message_received", "SYSTEM", "Error code %s: %s" % [parsed_result, error_message])
+	yield(get_tree(), "idle_frame")
+	return parsed_result

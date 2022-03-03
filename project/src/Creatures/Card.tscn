@@ -45,23 +45,23 @@ animations = [ {
 } ]
 
 [node name="Card" type="TextureRect"]
-margin_right = 330.0
+margin_right = 640.0
 margin_bottom = 200.0
 rect_min_size = Vector2( 330, 200 )
 rect_clip_content = true
+size_flags_horizontal = 2
 texture = ExtResource( 5 )
 expand = true
 stretch_mode = 6
 script = ExtResource( 2 )
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
+anchor_left = 0.25
+anchor_right = 0.5
 margin_right = 330.0
 margin_bottom = 200.0
 rect_min_size = Vector2( 330, 200 )
 custom_constants/separation = 10
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
 margin_right = 120.0
@@ -77,7 +77,7 @@ __meta__ = {
 [node name="AnimatedSprite" type="AnimatedSprite" parent="HBoxContainer/VBoxContainer/Sprite"]
 scale = Vector2( 3, 3 )
 frames = SubResource( 7 )
-frame = 4
+frame = 3
 playing = true
 centered = false
 offset = Vector2( 5, 5 )
