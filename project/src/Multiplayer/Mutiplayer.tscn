@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://src/Multiplayer/Mutiplayer.gd" type="Script" id=2]
+[ext_resource path="res://src/Multiplayer/Multiplayer Menus/Login.tscn" type="PackedScene" id=3]
+
+[node name="Multiplayer" type="Node"]
+script = ExtResource( 2 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="LoginRegister" parent="CanvasLayer" instance=ExtResource( 3 )]
+
+[node name="PlayButton" type="Button" parent="CanvasLayer"]
+margin_left = 930.0
+margin_top = 699.0
+margin_right = 1030.0
+margin_bottom = 749.0
+rect_min_size = Vector2( 100, 50 )
+text = "Play"
+
+[connection signal="pressed" from="CanvasLayer/PlayButton" to="." method="_on_PlayButton_pressed"]
