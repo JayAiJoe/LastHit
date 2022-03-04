@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://src/Multiplayer/Multiplayer Menus/ChatBox.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/Multiplayer/Mutiplayer.gd" type="Script" id=2]
+[ext_resource path="res://src/Multiplayer/Multiplayer Menus/Login.tscn" type="PackedScene" id=3]
+
+[node name="Multiplayer" type="Node"]
+script = ExtResource( 2 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="LoginRegister" parent="CanvasLayer" instance=ExtResource( 3 )]
+
+[node name="PlayButton" type="Button" parent="CanvasLayer"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -50.0
+margin_top = 200.0
+margin_right = 50.0
+rect_min_size = Vector2( 100, 50 )
+text = "Play"
+
+[node name="ChatBox" parent="CanvasLayer" instance=ExtResource( 1 )]
+
+[connection signal="pressed" from="CanvasLayer/PlayButton" to="." method="_on_PlayButton_pressed"]
+[connection signal="text_sent" from="CanvasLayer/ChatBox" to="." method="_on_ChatBox_text_sent"]
