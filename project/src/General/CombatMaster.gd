@@ -6,11 +6,19 @@ var characters
 var players
 var enemies
 
+var cards
+
 func _ready():
 	screen_size = get_viewport_rect().size
 	characters = get_tree().get_nodes_in_group("Characters")
 	players = get_tree().get_nodes_in_group("Players")
 	enemies = get_tree().get_nodes_in_group("Enemies")
+	
+	cards = get_node("Control/CombatHUD/Skills").get_children()
+	
+	for i in range(len(cards)):
+		cards[i].show_creature(Global.player.creatures[i])
+	
 	
 static func sort_initiative(a, b) -> bool:
 	return a.initiative > b.initiative
