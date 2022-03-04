@@ -40,7 +40,7 @@ func deferred_switch_scene(path):
 	current_scene = s.instance()
 	get_tree().get_root().add_child(current_scene)
 	get_tree().set_current_scene(current_scene)
-
+	
 func generate_biome_sequence(n):
 	var all = ["steam", "fae", "shadow"]
 	var final = []
