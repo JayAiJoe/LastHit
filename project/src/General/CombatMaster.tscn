@@ -11,21 +11,21 @@
 script = ExtResource( 6 )
 
 [node name="Control" type="Control" parent="."]
-margin_right = 1024.0
+margin_right = 1920.0
 margin_bottom = 200.0
 mouse_filter = 2
 
 [node name="CombatHUD" parent="Control" instance=ExtResource( 5 )]
-margin_top = 400.0
-margin_bottom = 400.0
+margin_top = 880.0
+margin_bottom = 880.0
 
 [node name="EncounterBase" parent="." instance=ExtResource( 1 )]
-position = Vector2( 800, 250 )
+position = Vector2( 1472, 587 )
 
 [node name="PlayerSprite" parent="." instance=ExtResource( 2 )]
-position = Vector2( 200, 250 )
+position = Vector2( 459, 587 )
 
 [node name="TurnQueue" parent="." instance=ExtResource( 3 )]
 
 [node name="DiceTray" parent="." instance=ExtResource( 4 )]
-position = Vector2( 50, 400 )
+position = Vector2( 50, 880 )
