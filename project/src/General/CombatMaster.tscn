@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://src/Encounters/EncounterBase.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/Players/PlayerSprite.tscn" type="PackedScene" id=2]
@@ -6,9 +6,16 @@
 [ext_resource path="res://src/Dice/DiceTray.tscn" type="PackedScene" id=4]
 [ext_resource path="res://src/UI/CombatHUD.tscn" type="PackedScene" id=5]
 [ext_resource path="res://src/General/CombatMaster.gd" type="Script" id=6]
+[ext_resource path="res://src/Assets/Biomes/fae.png" type="Texture" id=7]
 
 [node name="CombatMaster" type="Node2D"]
 script = ExtResource( 6 )
+
+[node name="Background" type="Sprite" parent="."]
+position = Vector2( 2, 5 )
+scale = Vector2( 0.639375, 0.573359 )
+texture = ExtResource( 7 )
+centered = false
 
 [node name="Control" type="Control" parent="."]
 margin_right = 1024.0

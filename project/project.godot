@@ -33,7 +33,7 @@ _global_script_class_icons={
 [application]
 
 config/name="LastHitWonder"
-run/main_scene="res://src/General/CombatMaster.tscn"
+run/main_scene="res://src/Menus/ChooseStarterMenu.tscn"
 config/icon="res://icon.png"
 
 [autoload]
