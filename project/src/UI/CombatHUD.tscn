@@ -8,9 +8,11 @@ anchor_bottom = 1.0
 mouse_filter = 1
 
 [node name="Skills" type="HBoxContainer" parent="."]
+
 rect_min_size = Vector2( 1920, 200 )
 custom_constants/separation = 0
 alignment = 1
+
 
 [node name="Card" parent="Skills" instance=ExtResource( 1 )]
 margin_right = 640.0

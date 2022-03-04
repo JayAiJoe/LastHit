@@ -15,6 +15,6 @@ var creatures
 func _ready():
 	creatures = [Creature.new(), Creature.new(), Creature.new()]
 	
-func _init(_name):
+func _init(_name = "Sampy"):
 	player_name = _name
 

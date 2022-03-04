@@ -135,7 +135,9 @@ _global_script_class_icons={
 [application]
 
 config/name="LastHitWonder"
+
 run/main_scene="res://src/Multiplayer/Mutiplayer.tscn"
+
 config/icon="res://icon.png"
 
 [autoload]

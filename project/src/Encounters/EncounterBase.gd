@@ -4,7 +4,6 @@ var creature
 
 var zone_radius = 50
 
-
 var combat_master = null
 
 func _ready():
@@ -53,6 +52,7 @@ func take_hit(roll, dmg):
 	if creature.current_hp == 0:
 		remove_from_group("Enemies")
 		queue_free()
+		
 
 #called on turn start
 func play_turn():

@@ -76,9 +76,6 @@ margin_bottom = 39.7143
 rect_scale = Vector2( 5, 5 )
 text = "0/0"
 align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="ArmorClass" type="Sprite" parent="."]
 position = Vector2( -120, -64 )
@@ -100,7 +97,7 @@ __meta__ = {
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 scale = Vector2( 10, 10 )
 frames = SubResource( 7 )
-frame = 1
+frame = 2
 playing = true
 
 [node name="StaticSprite" type="Sprite" parent="."]
