@@ -27,7 +27,8 @@ func _ready():
 	
 	bgs = {"steam": preload("res://src/Assets/Biomes/steam.png"),
 			"fae": preload("res://src/Assets/Biomes/fae.png"),
-			"shadow": preload("res://src/Assets/Biomes/shadow.png")}
+			"shadow": preload("res://src/Assets/Biomes/shadow.png"),
+			"water": preload("res://src/Assets/Biomes/water.jpg")}
 	
 func switch_scene_to(path):
 	call_deferred("deferred_switch_scene", path)
@@ -42,7 +43,7 @@ func deferred_switch_scene(path):
 	get_tree().set_current_scene(current_scene)
 	
 func generate_biome_sequence(n):
-	var all = ["steam", "fae", "shadow"]
+	var all = ["steam", "fae", "shadow", "water"]
 	var final = []
 	while len(final) < n:
 		all.shuffle()

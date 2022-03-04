@@ -6,7 +6,7 @@
 [ext_resource path="res://src/Dice/DiceTray.tscn" type="PackedScene" id=4]
 [ext_resource path="res://src/UI/CombatHUD.tscn" type="PackedScene" id=5]
 [ext_resource path="res://src/General/CombatMaster.gd" type="Script" id=6]
-[ext_resource path="res://src/Assets/Biomes/steam.png" type="Texture" id=7]
+[ext_resource path="res://src/Assets/Biomes/fae.png" type="Texture" id=7]
 
 [node name="CombatMaster" type="Node2D"]
 script = ExtResource( 6 )
