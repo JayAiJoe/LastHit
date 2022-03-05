@@ -66,6 +66,11 @@ func generate_boss_sequence(n):
 		final += all
 	boss_sequence = final.slice(0,n-1)
 	next_boss = boss_sequence[0]
+
+func encounter_end():
+	encounter += 1
+	next_biome = biome_sequence[encounter]
+	next_boss = boss_sequence[encounter]
 	
 func fill_creature_db():
 	creature_db = {"-1":{"name":"Nullmon",

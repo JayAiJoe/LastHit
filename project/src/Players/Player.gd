@@ -7,6 +7,7 @@ var max_hp = 20
 var current_hp = 20
 var crit_multiplier = 2
 var initiative = 1
+var dice = 5
 
 var shielded = false
 
