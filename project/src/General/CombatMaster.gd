@@ -1,6 +1,5 @@
 extends Node2D
 
-const EB = preload("res://src/Encounters/EncounterBase.tscn")
 var screen_size = Vector2.ZERO
 
 var characters
@@ -17,10 +16,11 @@ func _ready():
 	
 	cards = get_node("Control/CombatHUD/Skills").get_children()
 	for i in range(len(cards)):
+		#if error occurs, try running ChooseStarterMenu first
 		cards[i].show_creature(Global.player.creatures[i])
 		
 	$Background.set_texture(Global.bgs[Global.next_biome])
-	$EncounterBase.set_creature(Global.next_boss)
+	$Enemy.set_creature(Global.next_boss)
 		
 	
 static func sort_initiative(a, b) -> bool:

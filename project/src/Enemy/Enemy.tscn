@@ -1,41 +1,41 @@
 [gd_scene load_steps=15 format=2]
 
-[ext_resource path="res://src/Encounters/EncounterBase.gd" type="Script" id=1]
-[ext_resource path="res://src/General/DropZone.tscn" type="PackedScene" id=2]
-[ext_resource path="res://src/Assets/slimebuddy.png" type="Texture" id=3]
-[ext_resource path="res://src/Assets/healthbar_empty.png" type="Texture" id=4]
-[ext_resource path="res://src/Assets/healthbar.png" type="Texture" id=5]
-[ext_resource path="res://src/Assets/armor.png" type="Texture" id=6]
+[ext_resource path="res://src/General/DropZone.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/Enemy/Enemy.gd" type="Script" id=2]
+[ext_resource path="res://src/Assets/healthbar.png" type="Texture" id=3]
+[ext_resource path="res://src/Assets/armor.png" type="Texture" id=4]
+[ext_resource path="res://src/Assets/slimebuddy.png" type="Texture" id=5]
+[ext_resource path="res://src/Assets/healthbar_empty.png" type="Texture" id=6]
 [ext_resource path="res://src/Assets/Bosses/hedgehog.jpg" type="Texture" id=7]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
-atlas = ExtResource( 3 )
+atlas = ExtResource( 5 )
 region = Rect2( 0, 224, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=2]
 flags = 4
-atlas = ExtResource( 3 )
+atlas = ExtResource( 5 )
 region = Rect2( 32, 224, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=3]
 flags = 4
-atlas = ExtResource( 3 )
+atlas = ExtResource( 5 )
 region = Rect2( 64, 224, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=4]
 flags = 4
-atlas = ExtResource( 3 )
+atlas = ExtResource( 5 )
 region = Rect2( 96, 224, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=5]
 flags = 4
-atlas = ExtResource( 3 )
+atlas = ExtResource( 5 )
 region = Rect2( 128, 224, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=6]
 flags = 4
-atlas = ExtResource( 3 )
+atlas = ExtResource( 5 )
 region = Rect2( 160, 224, 32, 32 )
 
 [sub_resource type="SpriteFrames" id=7]
@@ -47,18 +47,18 @@ animations = [ {
 } ]
 
 [node name="EncounterBase" type="Node2D" groups=["Characters", "Enemies"]]
-script = ExtResource( 1 )
+script = ExtResource( 2 )
 
 [node name="Timer" type="Timer" parent="."]
 autostart = true
 
-[node name="DropZone" parent="." instance=ExtResource( 2 )]
+[node name="DropZone" parent="." instance=ExtResource( 1 )]
 modulate = Color( 1, 1, 1, 0.478431 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 scale = Vector2( 10, 10 )
 frames = SubResource( 7 )
-frame = 4
+frame = 3
 playing = true
 
 [node name="StaticSprite" type="Sprite" parent="."]
@@ -72,8 +72,8 @@ margin_right = 399.0
 margin_bottom = -55.0
 rect_scale = Vector2( 0.35, 0.35 )
 value = 10.0
-texture_over = ExtResource( 4 )
-texture_progress = ExtResource( 5 )
+texture_over = ExtResource( 6 )
+texture_progress = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -91,7 +91,7 @@ align = 1
 [node name="ArmorClass" type="Sprite" parent="."]
 position = Vector2( -120, -64 )
 scale = Vector2( 0.203125, 0.203125 )
-texture = ExtResource( 6 )
+texture = ExtResource( 4 )
 
 [node name="Armor" type="Label" parent="ArmorClass"]
 margin_left = -80.0
