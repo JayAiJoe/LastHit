@@ -9,18 +9,22 @@ var combat_master = null
 func _ready():
 	randomize()
 	creature = Creature.new()
-	set_zone_radius(120)
-	set_armor_class(8)
-	set_max_hp(30)
-	set_current_hp(30)
-	$DropZone.connect("trigger", self, "take_hit")
-	$DropZone.type = 2
-	$LifeBar/Life.set_text(str(creature.current_hp) + "/" + str(creature.max_hp))
-	roll_initiative(20, 20)
+	
 	combat_master = get_parent()
 	
 func set_creature(cid):
 	creature.set_creature(cid)
+	#enemy stats
+	set_zone_radius(120)
+	set_armor_class(8)
+	set_max_hp(30)
+	set_current_hp(30)
+	roll_initiative(20, 20)
+	
+	#visuals
+	$DropZone.connect("trigger", self, "take_hit")
+	$DropZone.type = 2
+	$LifeBar/Life.set_text(str(creature.current_hp) + "/" + str(creature.max_hp))
 	$StaticSprite.hide()
 	$AnimatedSprite.hide()
 	var sprite = $StaticSprite
@@ -61,12 +65,12 @@ func take_hit(roll, dmg):
 			set_current_hp(creature.current_hp - dmg)
 		play_hit_animation()
 	if creature.current_hp == 0:
-		hide()
+		combat_master.end_encounter()
 		
 
 #called on turn start
 func play_turn():
-	print("Slime did a turn!")
+	print(creature.creature_name + " did a turn!")
 	$Timer.wait_time = 0.5
 	$Timer.start()
 	yield($Timer, "timeout")

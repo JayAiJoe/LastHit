@@ -8,10 +8,13 @@ var dice_distance = 100
 var dice_size = 64
 
 func _ready():
-	reset()
+	pass
 
-
-func reset():
+func clear_dice():
+	for n in get_children():
+		n.queue_free()
+	
+func set_dice(d = d_num): 
 	for i in range(d_num):
 		var dice = Dice.instance()
 		dice.index = i
