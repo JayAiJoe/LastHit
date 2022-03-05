@@ -21,6 +21,7 @@ func select_starter(index):
 		cards.pop_at(cards.find(index))
 		
 	else:
+		
 		if len(cards) == 2:
 			starters.pop_front()
 			get_child(cards.pop_front()).deselect()

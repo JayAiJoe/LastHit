@@ -5,7 +5,6 @@ var type = 1
 
 signal trigger
 
-
 func _ready():
 	pass
 

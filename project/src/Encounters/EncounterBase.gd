@@ -19,6 +19,17 @@ func _ready():
 	roll_initiative(20, 20)
 	combat_master = get_parent()
 	
+func set_creature(cid):
+	creature.set_creature(cid)
+	$StaticSprite.hide()
+	$AnimatedSprite.hide()
+	var sprite = $StaticSprite
+	if creature.animated:
+		sprite = $AnimatedSprite
+	else:
+		sprite.set_texture(load(creature.image_path))
+	sprite.scale = Vector2(1,1) * creature.scale
+	sprite.show()
 
 func roll_initiative(minimum, maximum):
 	creature.initiative = randi() % (maximum-minimum+1) + minimum
@@ -50,8 +61,7 @@ func take_hit(roll, dmg):
 			set_current_hp(creature.current_hp - dmg)
 		play_hit_animation()
 	if creature.current_hp == 0:
-		remove_from_group("Enemies")
-		queue_free()
+		hide()
 		
 
 #called on turn start

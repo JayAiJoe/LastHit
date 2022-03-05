@@ -6,7 +6,7 @@
 [ext_resource path="res://src/Assets/healthbar_empty.png" type="Texture" id=4]
 [ext_resource path="res://src/Assets/healthbar.png" type="Texture" id=5]
 [ext_resource path="res://src/Assets/armor.png" type="Texture" id=6]
-[ext_resource path="res://src/Assets/slime.png" type="Texture" id=7]
+[ext_resource path="res://src/Assets/Bosses/hedgehog.jpg" type="Texture" id=7]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -53,6 +53,17 @@ script = ExtResource( 1 )
 autostart = true
 
 [node name="DropZone" parent="." instance=ExtResource( 2 )]
+modulate = Color( 1, 1, 1, 0.478431 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+scale = Vector2( 10, 10 )
+frames = SubResource( 7 )
+frame = 4
+playing = true
+
+[node name="StaticSprite" type="Sprite" parent="."]
+scale = Vector2( 0.202222, 0.202222 )
+texture = ExtResource( 7 )
 
 [node name="LifeBar" type="TextureProgress" parent="."]
 margin_left = -90.0
@@ -93,13 +104,3 @@ align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
-scale = Vector2( 10, 10 )
-frames = SubResource( 7 )
-frame = 2
-playing = true
-
-[node name="StaticSprite" type="Sprite" parent="."]
-visible = false
-texture = ExtResource( 7 )
