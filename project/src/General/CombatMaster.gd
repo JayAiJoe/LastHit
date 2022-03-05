@@ -1,5 +1,6 @@
 extends Node2D
 
+const EB = preload("res://src/Encounters/EncounterBase.tscn")
 var screen_size = Vector2.ZERO
 
 var characters
@@ -19,7 +20,8 @@ func _ready():
 		cards[i].show_creature(Global.player.creatures[i])
 		
 	$Background.set_texture(Global.bgs[Global.next_biome])
-	
+	$EncounterBase.set_creature(Global.next_boss)
+		
 	
 static func sort_initiative(a, b) -> bool:
 	return a.initiative > b.initiative
@@ -44,3 +46,4 @@ func get_player_by_current_hp(index):
 
 func get_enemy(index):
 	return enemies[index]
+
