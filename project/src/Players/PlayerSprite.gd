@@ -9,8 +9,8 @@ signal end_turn
 func _ready():
 	randomize()
 	player = Player.new("Sample")
-	set_max_hp(30)
-	set_current_hp(30)
+	set_max_hp(60)
+	set_current_hp(60)
 	$LifeBar/Life.set_text(str(player.current_hp) + "/" + str(player.max_hp))
 	roll_initiative(1, 1)
 	for a in get_tree().get_nodes_in_group("Actions"):

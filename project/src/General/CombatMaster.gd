@@ -56,8 +56,7 @@ func start_encounter():
 	$DiceTray.set_dice(Global.player.dice)
 	$TurnQueue.on_encounter_start()
 	
-	while get_tree().get_nodes_in_group("Enemies").size() > 0:
-		yield(play_turn(), "completed")
+	play_turn()
 	
 func end_encounter():
 	$DiceTray.clear_dice()
@@ -71,5 +70,7 @@ func end_encounter():
 func play_turn():
 	active_character = characters[character_turn_index]
 	character_turn_index = (character_turn_index+1)%(characters.size())
-	yield(active_character.play_turn(), "completed")
+	yield(active_character.play_turn(),"completed")
 	$TurnQueue.move_queue()
+	if $EnemySprite.creature.current_hp > 0:
+		play_turn()

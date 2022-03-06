@@ -30,6 +30,7 @@ func set_creature(cid):
 	var sprite = $StaticSprite
 	if creature.animated:
 		sprite = $AnimatedSprite
+		sprite.set_frames(load(creature.image_path))
 	else:
 		sprite.set_texture(load(creature.image_path))
 	sprite.scale = Vector2(1,1) * creature.scale
@@ -71,11 +72,11 @@ func take_hit(roll, dmg):
 #called on turn start
 func play_turn():
 	print(creature.creature_name + " did a turn!")
-	$Timer.wait_time = 0.5
+	$Timer.wait_time = 1
 	$Timer.start()
 	yield($Timer, "timeout")
 	if combat_master != null:
-		combat_master.get_player_by_initiative(0).take_hit(creature.base_dmg)
+		combat_master.get_player_by_initiative(0).take_hit(creature.base_dmg) 
 
 func play_hit_animation():
 	$Timer.wait_time = 0.2

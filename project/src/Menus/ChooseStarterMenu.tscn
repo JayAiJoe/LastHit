@@ -10,23 +10,23 @@ extents = Vector2( 26, 10 )
 script = ExtResource( 2 )
 
 [node name="CreatureCardChoice" parent="." instance=ExtResource( 1 )]
-position = Vector2( 483, 281 )
+position = Vector2( 471, 347 )
 scale = Vector2( 1.2, 1.2 )
 
 [node name="CreatureCardChoice2" parent="." instance=ExtResource( 1 )]
-position = Vector2( 1356, 270 )
+position = Vector2( 1344, 336 )
 scale = Vector2( 1.2, 1.2 )
 
 [node name="CreatureCardChoice3" parent="." instance=ExtResource( 1 )]
-position = Vector2( 216, 657 )
+position = Vector2( 204, 723 )
 scale = Vector2( 1.2, 1.2 )
 
 [node name="CreatureCardChoice4" parent="." instance=ExtResource( 1 )]
-position = Vector2( 948, 655 )
+position = Vector2( 936, 721 )
 scale = Vector2( 1.2, 1.2 )
 
 [node name="CreatureCardChoice5" parent="." instance=ExtResource( 1 )]
-position = Vector2( 1686, 655 )
+position = Vector2( 1674, 721 )
 scale = Vector2( 1.2, 1.2 )
 
 [node name="Area2D" type="Area2D" parent="."]
@@ -42,5 +42,13 @@ margin_top = -6.0
 margin_right = 23.0
 margin_bottom = 8.0
 text = "Accept"
+
+[node name="Label" type="Label" parent="."]
+margin_left = 522.0
+margin_top = 14.0
+margin_right = 613.0
+margin_bottom = 28.0
+rect_scale = Vector2( 10, 10 )
+text = "Pick 2 starters"
 
 [connection signal="input_event" from="Area2D" to="." method="accept_starters"]

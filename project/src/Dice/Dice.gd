@@ -12,7 +12,7 @@ onready var tray = get_parent()
 
 func _ready():
 	randomize()
-	value = roll(1,20)
+	value = roll(12,20)
 	$Number.text = str(value)
 
 func roll(minimum, maximum):
