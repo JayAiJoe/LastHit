@@ -1,9 +1,19 @@
 extends Node
 
+enum OpCodes {
+	NORMAL_ATTACK = 1,
+	ACTIVE_SKILL,
+	UPDATE_STATE,
+	DO_SPAWN,
+	INITIAL_STATE
+}
+
 const KEY := "last_hit"
 
 signal presences_changed
 signal chat_message_received(username, text)
+signal normal_attack(target, attacker, dice_value)
+signal initial_state_received(positions, initiatives, stats, names)
 
 var _client := Nakama.create_client(KEY, "127.0.0.1", 7350, "http")
 var _socket: NakamaSocket setget _no_set
@@ -78,8 +88,20 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 	var code := match_state.op_code
 	var raw := match_state.data
 	#match code:
-		#op codes
-
+		#OpCodes.NORMAL_ATTACK:
+		#	var decoded: Dictionary = JSON.parse(raw).result
+		#	var target = decoded.trgt
+		#	var attacker = decoded.atk
+		#	var dice_value = decoded.dice
+		#	emit_signal("normal_attack", target, attacker, dice_value)
+		#OpCodes.INITIAL_STATE:
+		#	var decoded: Dictionary = JSON.parse(raw).result
+		#	var positions: Dictionary = decoded.pos
+		#	var initiatives: Dictionary = decoded.ini
+		#	var stats: Dictionary = decoded.stats
+		#	var names: Dictionary = decoded.nms
+		#	emit_signal("initial_state_received", positions, initiatives, stats, names)
+			
 func _on_NamakaSocket_received_channel_message(message: NakamaAPI.ApiChannelMessage) -> void:
 	if message.code != 0:
 		return

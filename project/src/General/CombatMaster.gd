@@ -11,12 +11,18 @@ var cards
 var active_character
 var character_turn_index = 0
 
+onready var chat_box := $ChatBox
+
 func _ready():
 	screen_size = get_viewport_rect().size
 	characters = get_tree().get_nodes_in_group("Characters")
 	players = get_tree().get_nodes_in_group("Players")
 	enemies = get_tree().get_nodes_in_group("Enemies")
 	cards = get_node("Control/CombatHUD/Skills").get_children()
+	
+	if ServerConnection._socket:
+		ServerConnection.connect("chat_message_received", self, "_on_chat_message_received")
+		activate_chat()
 	
 	start_encounter()
 	
@@ -73,3 +79,13 @@ func play_turn():
 	character_turn_index = (character_turn_index+1)%(characters.size())
 	yield(active_character.play_turn(), "completed")
 	$TurnQueue.move_queue()
+	
+#Chat
+func activate_chat():
+	chat_box.visible = true
+	
+func _on_ChatBox_text_sent(text) -> void:
+	ServerConnection.send_text_async(text) #async yield
+
+func _on_chat_message_received(sender_name, text) -> void:
+	chat_box.add_reply(text, sender_name)
