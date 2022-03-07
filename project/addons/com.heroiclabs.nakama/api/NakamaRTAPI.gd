@@ -7,7 +7,7 @@ class Channel extends NakamaAsyncResult:
 
 	const _SCHEMA = {
 		"id": {"name": "id", "type": TYPE_STRING, "required": true},
-		"presences": {"name": "presences", "type": TYPE_ARRAY, "required": true, "content": "UserPresence"},
+		"presences": {"name": "presences", "type": TYPE_ARRAY, "required": false, "content": "UserPresence"},
 		"self": {"name": "self_presence", "type": "UserPresence", "required": true},
 		"room_name": {"name": "room_name", "type": TYPE_STRING, "required": false},
 		"group_id": {"name": "group_id", "type": TYPE_STRING, "required": false},

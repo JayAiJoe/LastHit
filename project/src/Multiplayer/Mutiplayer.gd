@@ -55,35 +55,13 @@ func authenticate_user_async(email: String, password: String) -> int:
 #Matchmaking
 func _on_PlayButton_pressed():
 	join_campaign_async(username)
-	#activate_chat()
 
 func join_campaign_async(player_name: String) -> int:
 	var result: int = yield(ServerConnection.connect_to_server_async(), "completed")
 	if result == OK:
 		result = yield(ServerConnection.join_campaign_async(), "completed")
-		Global.switch_scene_to("res://src/Menus/ChooseStarterMenu.tscn")
-		print(OK)
 	if result == OK:
-		print("\n\ngo to scene")
-		get_tree().change_scene_to(load("res://src/General/CombatMaster.tscn"))
-	#ServerConnection.connect("normal_attack", self, "_on_ServerConnection_state_updated")
+		Global.switch_scene_to("res://src/Menus/ChooseStarterMenu.tscn")
+		#ServerConnection.send_spawn(player_name)
 	return result
-
-
-
-#In-game Functions
-func _on_ServerConnection_initial_state_received( positions: Dictionary, initiatives: Dictionary, stats: Dictionary, names: Dictionary) -> void:
-	ServerConnection.disconnect("initial_state_received", self, "_on_ServerConnection_initial_state_received")
-	join_world(positions, initiatives, stats, names)
-	
-func join_world(state_positions: Dictionary, state_initiatives: Dictionary, state_stats: Dictionary, state_names: Dictionary) -> void:
-	var user_id := ServerConnection.get_user_id()
-	assert(state_positions.has(user_id), "Server did not return valid state")
-	var username: String = state_names.get(user_id)
-
-	var player_position: Vector2 = state_positions[user_id]
-	#player.setup(username, player_color, player_position, world.get_limits())
-
-	#ServerConnection.connect("normal_attack", self, "_on_ServerConnection_normal_attack")
-	#ServerConnection.connect("chat_message_received", self, "_on_chat_message_received")
 

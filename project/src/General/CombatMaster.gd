@@ -20,11 +20,9 @@ func _ready():
 	enemies = get_tree().get_nodes_in_group("Enemies")
 	cards = get_node("Control/CombatHUD/Skills").get_children()
 	
-	if ServerConnection._socket:
-		ServerConnection.connect("chat_message_received", self, "_on_chat_message_received")
-		activate_chat()
+	ServerConnection.connect("initial_state_received", self, "_on_ServerConnection_initial_state_received")
+	ServerConnection.send_spawn("player 1")
 	
-	start_encounter()
 	
 static func sort_initiative(a, b) -> bool:
 	return a.initiative > b.initiative
@@ -89,3 +87,23 @@ func _on_ChatBox_text_sent(text) -> void:
 
 func _on_chat_message_received(sender_name, text) -> void:
 	chat_box.add_reply(text, sender_name)
+	
+	
+	#In-game Functions
+func _on_ServerConnection_initial_state_received( positions: Dictionary, initiatives: Dictionary, stats: Dictionary, names: Dictionary) -> void:
+	ServerConnection.disconnect("initial_state_received", self, "_on_ServerConnection_initial_state_received")
+	join_campaign(positions, initiatives, stats, names)
+
+	
+func join_campaign(state_positions: Dictionary, state_initiatives: Dictionary, state_stats: Dictionary, state_names: Dictionary) -> void:
+	var user_id := ServerConnection.get_user_id()
+	assert(state_positions.has(user_id), "Server did not return valid state")
+	var username: String = state_names.get(user_id)
+
+	var player_position = state_positions[user_id]
+
+	ServerConnection.connect("normal_attack", self, "_on_ServerConnection_normal_attack")
+	ServerConnection.connect("chat_message_received", self, "_on_chat_message_received")
+	activate_chat()
+	
+	start_encounter()
