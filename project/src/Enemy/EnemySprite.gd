@@ -16,13 +16,14 @@ func set_creature(cid):
 	creature.set_creature(cid)
 	#enemy stats
 	set_zone_radius(120)
-	set_armor_class(8)
+	set_armor_class(1)
 	set_max_hp(30)
 	set_current_hp(30)
 	roll_initiative(20, 20)
 	
 	#visuals
-	$DropZone.connect("trigger", self, "take_hit")
+	#$DropZone.connect("trigger", self, "take_hit")
+	ServerConnection.connect("normal_attack", self, "take_hit")
 	$DropZone.type = 2
 	$LifeBar/Life.set_text(str(creature.current_hp) + "/" + str(creature.max_hp))
 	$StaticSprite.hide()
@@ -57,7 +58,7 @@ func set_armor_class(ac):
 	$ArmorClass/Armor.text = str(ac)
 
 #called when a die is dropped on this encounter's dropzone
-func take_hit(roll, dmg):
+func take_hit(id : String, dmg : int, roll : int):
 	if roll > creature.armor_class:
 		if roll == 20:
 			set_current_hp(creature.current_hp - dmg*creature.crit_multiplier)

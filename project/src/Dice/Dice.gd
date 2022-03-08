@@ -47,7 +47,7 @@ func _input(event):
 				var distance = global_position.distance_to(node.global_position)
 				if distance <= node.radius:
 					rest_point = node.global_position
-					node.trigger(value, base_dmg)
+					node.trigger(value)
 					draggable = false
 					if node.type == 2:
 						queue_free()

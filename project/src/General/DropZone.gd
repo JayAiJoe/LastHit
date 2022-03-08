@@ -20,8 +20,9 @@ func deselect():
 	modulate = Color.white
 
 ## called when a die is released on this drop zone
-func trigger(value1, value2):
-	emit_signal("trigger", value1, value2)
+func trigger(value1):
+	#emit_signal("trigger", value1, value2)
+	ServerConnection.send_attack(value1)
 	if type == 1:
 		remove_from_group("DropZones")
 		queue_free()
