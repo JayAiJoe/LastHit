@@ -29,6 +29,7 @@ func set_creature(cid):
 	var sprite = $StaticSprite
 	if creature.animated:
 		sprite = $AnimatedSprite
+		sprite.set_sprite_frames(load(creature.image_path))
 	else:
 		sprite.set_texture(load(creature.image_path))
 	sprite.scale = Vector2(1,1) * creature.scale

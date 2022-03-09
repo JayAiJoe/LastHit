@@ -68,6 +68,9 @@ func _on_ServerConnection_encounter_started(biome : String, boss : String):
 	
 	while get_tree().get_nodes_in_group("Enemies").size() > 0:
 		yield(play_turn(), "completed")
+
+func start_encounter():
+	pass
 	
 func end_encounter():
 	$StartButton.disabled = false
@@ -76,6 +79,9 @@ func end_encounter():
 	Global.encounter_end()
 	if Global.encounter % 3 == 0:
 		print("campfire time")
+		$Background.set_texture("res://src/Assets/Biomes/campfire.jpg")
+	else:
+		start_encounter()
 		
 func play_turn():
 	active_character = characters[character_turn_index]

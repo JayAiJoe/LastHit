@@ -43,4 +43,12 @@ margin_right = 23.0
 margin_bottom = 8.0
 text = "Accept"
 
+[node name="header" type="Label" parent="."]
+margin_left = 490.0
+margin_top = 6.0
+margin_right = 581.0
+margin_bottom = 20.0
+rect_scale = Vector2( 10, 10 )
+text = "Pick 2 starters"
+
 [connection signal="input_event" from="Area2D" to="." method="accept_starters"]

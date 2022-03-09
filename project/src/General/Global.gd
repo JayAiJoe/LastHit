@@ -80,7 +80,7 @@ func fill_creature_db():
 						 "passive_text":"Whenever you apply poison, double it.",
 						 "active_text":"Apply 1 poison to an enemy",
 						 "animated": true,
-						 "image_path": "res://src/Assets/Bosses/voodoo.png",
+						 "image_path": "res://src/Assets/Bosses/slime.tres",
 						 "scale": 10},
 					"1":{"name":"Dr. Hedgehog",
 						 "passive_text":"You can now throw dice to anyone but yourself. Your dice now heal instead of damage.",
