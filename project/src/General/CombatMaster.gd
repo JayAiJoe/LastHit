@@ -56,7 +56,7 @@ func get_player_by_current_hp(index):
 func get_enemy(index):
 	return enemies[index]
 	
-func _on_ServerConnection_encounter_started(biome : String, boss : String):
+func _on_ServerConnection_encounter_started(biome : String, boss : String): 
 	for i in range(len(cards)):
 		cards[i].show_creature(Global.player.creatures[i]) #if error occurs, try running ChooseStarterMenu first
 		
@@ -66,8 +66,20 @@ func _on_ServerConnection_encounter_started(biome : String, boss : String):
 	$DiceTray.set_dice(Global.player.dice)
 	$TurnQueue.on_encounter_start()
 	
-	while get_tree().get_nodes_in_group("Enemies").size() > 0:
-		yield(play_turn(), "completed")
+	start_turn()
+		
+func start_encounter():
+	pass
+	
+func start_turn():
+	active_character = characters[character_turn_index]
+	active_character.play_turn()
+	
+func end_turn():
+	$TurnQueue.move_queue()
+	character_turn_index = (character_turn_index+1)%(characters.size())
+	if $EnemySprite.creature.current_hp > 0:
+		start_turn()
 	
 func end_encounter():
 	$StartButton.disabled = false
@@ -76,12 +88,12 @@ func end_encounter():
 	Global.encounter_end()
 	if Global.encounter % 3 == 0:
 		print("campfire time")
+		$Background.set_texture(load("res://src/Assets/Biomes/campfire.jpg"))
+	else:
+		start_encounter()
 		
-func play_turn():
-	active_character = characters[character_turn_index]
-	character_turn_index = (character_turn_index+1)%(characters.size())
-	yield(active_character.play_turn(), "completed")
-	$TurnQueue.move_queue()
+
+	
 	
 #Chat
 func activate_chat():
@@ -113,10 +125,13 @@ func _on_ServerConnection_initial_state_received(positions: Dictionary, initiati
 	join_campaign(positions, initiatives, stats, names)
 
 func _on_ServerConnection_normal_attack_received(id : String, attack : int, dice_value : int):
-	enemies[0].take_hit(attack, dice_value)
+	deal_damage(active_character, enemies[0], attack, dice_value)
 
 func _on_ServerConnection_enemy_action_received(target: int, value: int):
-	players[target-1].take_hit(value)
+	deal_damage(enemies[0], players[target-1], value)
+	#pwedeng iba yung icall such as
+	#heal($EnemySprite, $EnemySprite, value)
+	#give_status_effect($EnemySprite, $EnemySprite, value)
 	
 func spawn():
 	var p = TeamSlot.instance()
@@ -132,3 +147,9 @@ func _on_ServerConnection_character_spawned(id : String, name : String):
 func _on_StartButton_pressed():
 	ServerConnection.send_next_encounter()
 	$StartButton.disabled = true
+	
+#combat stuff
+func deal_damage(attacker, attacked, amount, die=10): #(enemy/player sprite, enemy/player sprite, int)
+	#insert amount modifiers from attacker here
+	attacked.take_damage(amount, die)
+	end_turn()

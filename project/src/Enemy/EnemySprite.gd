@@ -29,6 +29,7 @@ func set_creature(cid):
 	var sprite = $StaticSprite
 	if creature.animated:
 		sprite = $AnimatedSprite
+		sprite.set_sprite_frames(load(creature.image_path))
 	else:
 		sprite.set_texture(load(creature.image_path))
 	sprite.scale = Vector2(1,1) * creature.scale
@@ -56,7 +57,7 @@ func set_armor_class(ac):
 	$ArmorClass/Armor.text = str(ac)
 
 #called when a die is dropped on this encounter's dropzone
-func take_hit(dmg : int, roll : int):
+func take_damage(dmg : int, roll : int):
 	if roll > creature.armor_class:
 		if roll == 20:
 			set_current_hp(creature.current_hp - dmg*creature.crit_multiplier)
