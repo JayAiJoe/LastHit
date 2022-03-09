@@ -12,7 +12,6 @@
 [ext_resource path="res://src/Assets/healthbar_empty.png" type="Texture" id=11]
 [ext_resource path="res://src/Assets/healthbar.png" type="Texture" id=12]
 
-
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
 "frames": [ ExtResource( 5 ), ExtResource( 4 ), ExtResource( 6 ), ExtResource( 3 ), ExtResource( 7 ), ExtResource( 9 ), ExtResource( 8 ), ExtResource( 10 ) ],

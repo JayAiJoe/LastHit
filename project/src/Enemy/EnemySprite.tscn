@@ -58,7 +58,7 @@ modulate = Color( 1, 1, 1, 0.478431 )
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 scale = Vector2( 10, 10 )
 frames = SubResource( 7 )
-frame = 2
+frame = 4
 playing = true
 
 [node name="StaticSprite" type="Sprite" parent="."]
