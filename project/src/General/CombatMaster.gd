@@ -28,6 +28,7 @@ func _ready():
 	ServerConnection.connect("character_spawned", self, "_on_ServerConnection_character_spawned")
 	ServerConnection.connect("next_encounter", self, "_on_ServerConnection_encounter_started")
 	ServerConnection.connect("normal_attack" , self, "_on_ServerConnection_normal_attack_received")
+	ServerConnection.connect("enemy_action", self, "_on_ServerConnection_enemy_action_received")
 	ServerConnection.send_spawn("player 1")
 	
 	
@@ -99,10 +100,10 @@ func join_campaign(state_positions: Dictionary, state_initiatives: Dictionary, s
 	assert(state_positions.has(user_id), "Server did not return valid state")
 	var username: String = state_names.get(user_id)
 	var player_position = state_positions[user_id]
+	print(state_names)
 	for n in state_names:
-		if n != username:
+		if n != user_id:
 			spawn()
-	ServerConnection.connect("normal_attack", self, "_on_ServerConnection_normal_attack")
 	ServerConnection.connect("chat_message_received", self, "_on_chat_message_received")
 	activate_chat()
 	
@@ -112,8 +113,11 @@ func _on_ServerConnection_initial_state_received(positions: Dictionary, initiati
 	join_campaign(positions, initiatives, stats, names)
 
 func _on_ServerConnection_normal_attack_received(id : String, attack : int, dice_value : int):
-	pass
+	enemies[0].take_hit(attack, dice_value)
 
+func _on_ServerConnection_enemy_action_received(target: int, value: int):
+	players[target-1].take_hit(value)
+	
 func spawn():
 	var p = TeamSlot.instance()
 	team.add_child(p)
@@ -126,5 +130,5 @@ func _on_ServerConnection_character_spawned(id : String, name : String):
 	spawn()
 	
 func _on_StartButton_pressed():
-	ServerConnection.send_next()
+	ServerConnection.send_next_encounter()
 	$StartButton.disabled = true

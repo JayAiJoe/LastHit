@@ -9,7 +9,8 @@ local OpCodes = {
     initial_state = 2,
     do_spawn = 3,
     normal_attack = 4,
-    next_encounter = 5
+    next_encounter = 5,
+    enemy_action = 6
 }
 
 
@@ -124,6 +125,11 @@ function campaign_control.match_loop(_, dispatcher, _, state, messages)
         if op_code == OpCodes.normal_attack then
             if decoded.id == current_id then
                 dispatcher.broadcast_message(OpCodes.normal_attack, message.data)
+            end
+        end
+        if op_code == OpCodes.enemy_action then
+            if decoded.id == captain_id then
+                dispatcher.broadcast_message(OpCodes.enemy_action, message.data)
             end
         end
     end

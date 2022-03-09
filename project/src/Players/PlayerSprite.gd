@@ -52,7 +52,7 @@ func play_turn():
 	yield(self, "end_turn")
 
 ## gets called when a die is played
-func perform_action(roll, dmg):
+func perform_action(roll):
 	print("Hero turn: " + str(roll))
 	emit_signal("end_turn")
 	

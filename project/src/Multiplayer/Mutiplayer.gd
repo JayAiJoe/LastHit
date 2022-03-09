@@ -62,6 +62,5 @@ func join_campaign_async(player_name: String) -> int:
 		result = yield(ServerConnection.join_campaign_async(), "completed")
 	if result == OK:
 		Global.switch_scene_to("res://src/Menus/ChooseStarterMenu.tscn")
-		#ServerConnection.send_spawn(player_name)
 	return result
 
