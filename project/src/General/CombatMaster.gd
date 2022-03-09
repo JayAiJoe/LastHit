@@ -1,5 +1,7 @@
 extends Node2D
 
+const campfire = preload("res://src/Assets/campfire.jpg")
+
 var screen_size = Vector2.ZERO
 
 var characters
@@ -10,6 +12,8 @@ var cards
 
 var active_character
 var character_turn_index = 0
+
+signal start_encounter
 
 func _ready():
 	screen_size = get_viewport_rect().size
@@ -57,20 +61,27 @@ func start_encounter():
 	$TurnQueue.on_encounter_start()
 	
 	play_turn()
+
+func play_turn():
+	active_character = characters[character_turn_index]
+	active_character.play_turn()
+	character_turn_index = (character_turn_index+1)%(characters.size())
 	
+func end_turn():
+	$TurnQueue.move_queue()
+	if $EnemySprite.creature.current_hp > 0:
+		play_turn()
+	else:
+		end_encounter()
+
 func end_encounter():
 	$DiceTray.clear_dice()
 	$TurnQueue.on_encounter_end()
 	Global.encounter_end()
 	if Global.encounter % 3 == 0:
-		print("campfire time")
+		$Background.set_texture(campfire)
 	else:
 		start_encounter()
 		
-func play_turn():
-	active_character = characters[character_turn_index]
-	character_turn_index = (character_turn_index+1)%(characters.size())
-	yield(active_character.play_turn(),"completed")
-	$TurnQueue.move_queue()
-	if $EnemySprite.creature.current_hp > 0:
-		play_turn()
+func deal_damage(attacker, attacked, amount):
+	pass

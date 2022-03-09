@@ -6,7 +6,7 @@
 [ext_resource path="res://src/Dice/DiceTray.tscn" type="PackedScene" id=4]
 [ext_resource path="res://src/UI/CombatHUD.tscn" type="PackedScene" id=5]
 [ext_resource path="res://src/General/CombatMaster.gd" type="Script" id=6]
-[ext_resource path="res://src/Assets/Biomes/fae.png" type="Texture" id=7]
+[ext_resource path="res://src/Assets/campfire.jpg" type="Texture" id=7]
 
 [node name="CombatMaster" type="Node2D"]
 script = ExtResource( 6 )
@@ -35,3 +35,5 @@ position = Vector2( 459, 587 )
 
 [node name="DiceTray" parent="." instance=ExtResource( 4 )]
 position = Vector2( 50, 880 )
+
+[connection signal="start_encounter" from="." to="TurnQueue" method="_on_start_encounter"]

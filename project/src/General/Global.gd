@@ -52,15 +52,22 @@ func deferred_switch_scene(path):
 func generate_biome_sequence(n):
 	var all = ["steam", "fae", "shadow", "water"]
 	var final = []
+	var i = 0
+	n = max(n,12)
 	while len(final) < n:
-		all.shuffle()
-		final += all
-	biome_sequence = final.slice(0,n-1)
+		if i%4 == 0:
+			all.shuffle()
+		final += [all[i%4], all[i%4], all[i%4]]
+		i += 1
+		
+	biome_sequence = final
+	print(biome_sequence)
 	next_biome = biome_sequence[0]
 	
 func generate_boss_sequence(n):
 	var all = ["0", "1", "2", "3", "4"]
 	var final = []
+	n = max(n,12)
 	while len(final) < n:
 		all.shuffle()
 		final += all

@@ -50,6 +50,7 @@ func play_hit_animation():
 ## gets called on turn start, waits until a die is played
 func play_turn():
 	yield(self, "end_turn")
+	combat_master.end_turn()
 
 ## gets called when a die is played
 func perform_action(roll, dmg):

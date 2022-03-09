@@ -41,6 +41,3 @@ static func sort_initiative(a, b) -> bool:
 
 func move_queue():
 	$Visual.move_child($Visual.get_child(0), characters.size() - 1)
-	
-	
-	
