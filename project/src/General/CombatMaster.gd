@@ -28,6 +28,7 @@ func _ready():
 	ServerConnection.connect("character_spawned", self, "_on_ServerConnection_character_spawned")
 	ServerConnection.connect("next_encounter", self, "_on_ServerConnection_encounter_started")
 	ServerConnection.connect("character_action_received" , self, "_on_ServerConnection_character_action_received")
+	ServerConnection.connect("turn_id_received", self, "_on_ServerConnection_turn_id_received")
 	ServerConnection.send_spawn(ServerConnection.username)
 	
 	
@@ -79,6 +80,7 @@ func end_encounter():
 func play_turn():
 	active_character = characters[character_turn_index]
 	character_turn_index = (character_turn_index+1)%(characters.size())
+	ServerConnection.send_turn_id(active_character.id)
 	yield(active_character.play_turn(), "completed")
 	$TurnQueue.move_queue()
 	
@@ -99,7 +101,7 @@ func join_campaign(character_states: Dictionary) -> void:
 	assert(character_states.has(user_id), "Server did not return valid state")
 	for c in character_states:
 		if c != user_id:
-			spawn()
+			spawn(c)
 			
 	ServerConnection.connect("chat_message_received", self, "_on_chat_message_received")
 	activate_chat()
@@ -109,6 +111,9 @@ func join_campaign(character_states: Dictionary) -> void:
 func _on_ServerConnection_initial_state_received(character_states: Dictionary) -> void:
 	ServerConnection.disconnect("initial_state_received", self, "_on_ServerConnection_initial_state_received")
 	join_campaign(character_states)
+
+func _on_ServerConnection_turn_id_received(turn_id : String) -> void:
+	Global.turn_id = turn_id
 
 func _on_ServerConnection_character_action_received(actor_id : String, action_id : int, targets: Array, dice_value : int):
 	for t in targets:
@@ -120,16 +125,18 @@ func _on_ServerConnection_character_action_received(actor_id : String, action_id
 			if t < players.size():
 				players[t].take_hit(5)
 
-func spawn():
+func spawn(id : String):
 	var p = TeamSlot.instance()
 	team.add_child(p)
-	p.get_child(0).add_to_group("Characters")
-	p.get_child(0).add_to_group("Players")
+	var p_sprite = p.get_child(0)
+	p_sprite.id = id
+	p_sprite.add_to_group("Characters")
+	p_sprite.add_to_group("Players")
 	players = get_tree().get_nodes_in_group("Players")
 	characters = get_tree().get_nodes_in_group("Characters")
 
 func _on_ServerConnection_character_spawned(id : String, name : String):
-	spawn()
+	spawn(id)
 	
 func _on_StartButton_pressed():
 	ServerConnection.send_next_encounter()

@@ -10,7 +10,9 @@ local OpCodes = {
     do_spawn = 3,
     next_encounter = 4,
     character_action = 5,
-    fetch_state = 6
+    fetch_state = 6,
+    add_creature = 7,
+    turn_id = 8
 }
 
 function campaign_control.match_init(_, _)
@@ -90,7 +92,6 @@ function campaign_control.match_loop(_, dispatcher, _, state, messages)
             end
         end
         if op_code == OpCodes.do_spawn then
-
             state.characters[decoded.id].name = decoded.nm
             local encoded = nk.json_encode(state.characters)
 
@@ -103,11 +104,23 @@ function campaign_control.match_loop(_, dispatcher, _, state, messages)
             end
         end
         if op_code == OpCodes.character_action then
-            dispatcher.broadcast_message(OpCodes.character_action, message.data)
+            if decoded.id == current_id then
+                dispatcher.broadcast_message(OpCodes.character_action, message.data)
+            end
         end
         if op_code == OpCodes.fetch_state then
             local encoded = nk.json_encode(state)
             dispatcher.broadcast_message(OpCodes.fetch_state, encoded)
+        end
+        if op_code == OpCodes.add_creature then
+            state.characters[decoded.id].creatures[decoded.ind] = decoded.ctr
+            dispatcher.broadcast_message(OpCodes.add_creature, message.data)
+        end
+        if op_code == OpCodes.turn_id then
+            if decoded.id == captain_id then
+                current_id = decoded.tid
+                dispatcher.broadcast_message(OpCodes.turn_id, message.data)
+            end
         end
     end
     return state

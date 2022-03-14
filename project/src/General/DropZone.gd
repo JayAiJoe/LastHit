@@ -21,9 +21,9 @@ func deselect():
 
 ## called when a die is released on this drop zone
 func trigger(dice_value):
-	emit_signal("trigger", dice_value)
-	ServerConnection.send_action(ServerConnection.get_user_id(), 1, [-1], dice_value)
-	if type == 1:
-		remove_from_group("DropZones")
-		queue_free()
+	if Global.turn_id == ServerConnection.get_user_id():
+		ServerConnection.send_action(ServerConnection.get_user_id(), 1, [-1], dice_value)
+		if type == 1:
+			remove_from_group("DropZones")
+			queue_free()
 	

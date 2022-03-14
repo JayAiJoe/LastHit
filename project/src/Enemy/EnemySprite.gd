@@ -5,6 +5,7 @@ var creature
 var zone_radius = 50
 
 var combat_master = null
+var id = "enemy"
 
 func _ready():
 	randomize()

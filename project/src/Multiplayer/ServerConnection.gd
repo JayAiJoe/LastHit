@@ -6,7 +6,9 @@ enum OpCodes {
 	DO_SPAWN = 3,
 	NEXT_ENCOUNTER = 4,
 	CHARACTER_ACTION = 5,
-	FETCH_STATE = 6
+	FETCH_STATE = 6,
+	ADD_CREATURE = 7,
+	TURN_ID = 8
 }
 
 const KEY := "last_hit"
@@ -14,9 +16,10 @@ const KEY := "last_hit"
 signal presences_changed
 signal chat_message_received(username, text)
 signal initial_state_received(character_states)
-signal character_spawned(id, name)
+signal character_spawned(id, name) 
 signal next_encounter(biome, boss)
-signal character_action_received(target, value)
+signal character_action_received(actor_id, action_id, targets, dice_value)
+signal turn_id_received(turn_id)
 
 var _client := Nakama.create_client(KEY, "127.0.0.1", 7350, "http")
 var _socket: NakamaSocket setget _no_set
@@ -116,6 +119,14 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 		OpCodes.FETCH_STATE:
 			var decoded: Dictionary = JSON.parse(raw).result
 			print(decoded)
+		OpCodes.ADD_CREATURE:
+			var decoded: Dictionary = JSON.parse(raw).result
+			print(decoded)
+		OpCodes.TURN_ID:
+			var decoded: Dictionary = JSON.parse(raw).result
+			var turn_id : String = decoded.tid
+			print("turn : " + turn_id)
+			emit_signal("turn_id_received", turn_id)
 			
 func _on_NamakaSocket_received_channel_message(message: NakamaAPI.ApiChannelMessage) -> void:
 	if message.code != 0:
@@ -175,6 +186,16 @@ func send_fetch_state() -> void:
 	if _socket:
 		var payload = {id = get_user_id()}
 		_socket.send_match_state_async(_campaign_id, OpCodes.FETCH_STATE, JSON.print(payload))
+
+func send_add_creature(creature_id : int, creature_index : int) -> void:
+	if _socket:
+		var payload = {id = get_user_id(), ctr = creature_id, ind = creature_index}
+		_socket.send_match_state_async(_campaign_id, OpCodes.ADD_CREATURE, JSON.print(payload))
+
+func send_turn_id(turn_id : String) -> void:
+	if _socket:
+		var payload = {id = get_user_id(), tid = turn_id}
+		_socket.send_match_state_async(_campaign_id, OpCodes.TURN_ID, JSON.print(payload))
 
 
 #Chat

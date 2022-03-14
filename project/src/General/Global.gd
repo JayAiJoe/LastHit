@@ -13,6 +13,7 @@ var next_biome
 var boss_sequence
 var next_boss
 var encounter
+var turn_id = ""
 
 var creature_db = {}
 

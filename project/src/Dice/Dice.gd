@@ -46,9 +46,10 @@ func _input(event):
 			for node in get_tree().get_nodes_in_group("DropZones"):
 				var distance = global_position.distance_to(node.global_position)
 				if distance <= node.radius:
-					rest_point = node.global_position
-					node.trigger(value)
-					draggable = false
-					if node.type == 2:
-						queue_free()
+					if Global.turn_id == ServerConnection.get_user_id():
+						rest_point = node.global_position
+						node.trigger(value)
+						draggable = false
+						if node.type == 2:
+							queue_free()
 
