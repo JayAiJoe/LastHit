@@ -4,20 +4,19 @@ enum OpCodes {
 	ASSIGN_CAPTAIN = 1
 	INITIAL_STATE = 2,
 	DO_SPAWN = 3,
-	NORMAL_ATTACK = 4,
-	NEXT_ENCOUNTER = 5,
-	ENEMY_ACTION = 6
+	NEXT_ENCOUNTER = 4,
+	CHARACTER_ACTION = 5,
+	FETCH_STATE = 6
 }
 
 const KEY := "last_hit"
 
 signal presences_changed
 signal chat_message_received(username, text)
-signal normal_attack(id, attack, dice_value)
-signal initial_state_received(positions, initiatives, stats, names)
+signal initial_state_received(character_states)
 signal character_spawned(id, name)
 signal next_encounter(biome, boss)
-signal enemy_action(target, value)
+signal character_action_received(target, value)
 
 var _client := Nakama.create_client(KEY, "127.0.0.1", 7350, "http")
 var _socket: NakamaSocket setget _no_set
@@ -29,6 +28,8 @@ var error_message := "" setget _no_set, _get_error_message
 var presences := {} setget _no_set
 var _campaign_id: String setget _no_set
 var _channel_id: String setget _no_set
+
+var username = "default name"
 
 func _no_set(_value) -> void:
 	pass
@@ -94,32 +95,27 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 	match code:
 		OpCodes.INITIAL_STATE:
 			var decoded : Dictionary = JSON.parse(raw).result
-			var positions : Dictionary = decoded.pos
-			var initiatives : Dictionary = decoded.ini
-			var stats : Dictionary = decoded.stats
-			var names : Dictionary = decoded.nms
-			emit_signal("initial_state_received", positions, initiatives, stats, names)
+			emit_signal("initial_state_received", decoded)
 		OpCodes.DO_SPAWN:
 			var decoded: Dictionary = JSON.parse(raw).result
 			var id : String = decoded.id
 			var name : String = decoded.nm
 			emit_signal("character_spawned", id, name)
-		OpCodes.NORMAL_ATTACK:
-			var decoded: Dictionary = JSON.parse(raw).result
-			var id: String = decoded.id
-			var attack : int = decoded.atk
-			var dice_value : int = decoded.die
-			emit_signal("normal_attack", id, attack, dice_value)
 		OpCodes.NEXT_ENCOUNTER:
 			var decoded: Dictionary = JSON.parse(raw).result
 			var biome : String = decoded.bio
 			var boss : String = decoded.bss
 			emit_signal("next_encounter", biome, boss)
-		OpCodes.ENEMY_ACTION:
+		OpCodes.CHARACTER_ACTION:
 			var decoded: Dictionary = JSON.parse(raw).result
-			var target : int = decoded.tgt
-			var value : int = decoded.val
-			emit_signal("enemy_action", target, value)
+			var actor_id : String = decoded.id
+			var action_id : int = decoded.act
+			var targets : Array = decoded.tgt
+			var dice_value : int = decoded.die
+			emit_signal("character_action_received", actor_id, action_id, targets, dice_value)
+		OpCodes.FETCH_STATE:
+			var decoded: Dictionary = JSON.parse(raw).result
+			print(decoded)
 			
 func _on_NamakaSocket_received_channel_message(message: NakamaAPI.ApiChannelMessage) -> void:
 	if message.code != 0:
@@ -170,16 +166,15 @@ func send_next_encounter() -> void:
 		var payload = {id = get_user_id(), bio = Global.next_biome, bss = Global.next_boss}
 		_socket.send_match_state_async(_campaign_id, OpCodes.NEXT_ENCOUNTER, JSON.print(payload))
 
-func send_normal_attack(dice_value : int) -> void:
+func send_action(actor_id : String, action_id : int, targets : Array, dice_value : int) -> void:
 	if _socket:
-		var payload = {id = get_user_id(), atk = 10, die = dice_value}
-		_socket.send_match_state_async(_campaign_id, OpCodes.NORMAL_ATTACK, JSON.print(payload))
+		var payload = {id = actor_id, act = action_id, tgt = targets, die = dice_value}
+		_socket.send_match_state_async(_campaign_id, OpCodes.CHARACTER_ACTION, JSON.print(payload))
 
-func send_enemy_action(target : int, value : int) -> void:
-	print("enemy action sent!!!!")
+func send_fetch_state() -> void:
 	if _socket:
-		var payload = {id = get_user_id(), tgt = target, val = value}
-		_socket.send_match_state_async(_campaign_id, OpCodes.ENEMY_ACTION, JSON.print(payload))
+		var payload = {id = get_user_id()}
+		_socket.send_match_state_async(_campaign_id, OpCodes.FETCH_STATE, JSON.print(payload))
 
 
 #Chat

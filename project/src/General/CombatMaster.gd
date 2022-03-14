@@ -27,9 +27,8 @@ func _ready():
 	ServerConnection.connect("initial_state_received", self, "_on_ServerConnection_initial_state_received")
 	ServerConnection.connect("character_spawned", self, "_on_ServerConnection_character_spawned")
 	ServerConnection.connect("next_encounter", self, "_on_ServerConnection_encounter_started")
-	ServerConnection.connect("normal_attack" , self, "_on_ServerConnection_normal_attack_received")
-	ServerConnection.connect("enemy_action", self, "_on_ServerConnection_enemy_action_received")
-	ServerConnection.send_spawn("player 1")
+	ServerConnection.connect("character_action_received" , self, "_on_ServerConnection_character_action_received")
+	ServerConnection.send_spawn(ServerConnection.username)
 	
 	
 static func sort_initiative(a, b) -> bool:
@@ -95,29 +94,32 @@ func _on_chat_message_received(sender_name, text) -> void:
 	
 	
 #In-game Functions
-func join_campaign(state_positions: Dictionary, state_initiatives: Dictionary, state_stats: Dictionary, state_names: Dictionary) -> void:
+func join_campaign(character_states: Dictionary) -> void:
 	var user_id := ServerConnection.get_user_id()
-	assert(state_positions.has(user_id), "Server did not return valid state")
-	var username: String = state_names.get(user_id)
-	var player_position = state_positions[user_id]
-	print(state_names)
-	for n in state_names:
-		if n != user_id:
+	assert(character_states.has(user_id), "Server did not return valid state")
+	for c in character_states:
+		if c != user_id:
 			spawn()
+			
 	ServerConnection.connect("chat_message_received", self, "_on_chat_message_received")
 	activate_chat()
+
 	
 
-func _on_ServerConnection_initial_state_received(positions: Dictionary, initiatives: Dictionary, stats: Dictionary, names: Dictionary) -> void:
+func _on_ServerConnection_initial_state_received(character_states: Dictionary) -> void:
 	ServerConnection.disconnect("initial_state_received", self, "_on_ServerConnection_initial_state_received")
-	join_campaign(positions, initiatives, stats, names)
+	join_campaign(character_states)
 
-func _on_ServerConnection_normal_attack_received(id : String, attack : int, dice_value : int):
-	enemies[0].take_hit(attack, dice_value)
+func _on_ServerConnection_character_action_received(actor_id : String, action_id : int, targets: Array, dice_value : int):
+	for t in targets:
+		if t < 0:
+			var te = -1 - t
+			if te < enemies.size():
+				enemies[te].take_hit(5, dice_value)
+		else:
+			if t < players.size():
+				players[t].take_hit(5)
 
-func _on_ServerConnection_enemy_action_received(target: int, value: int):
-	players[target-1].take_hit(value)
-	
 func spawn():
 	var p = TeamSlot.instance()
 	team.add_child(p)
@@ -132,3 +134,4 @@ func _on_ServerConnection_character_spawned(id : String, name : String):
 func _on_StartButton_pressed():
 	ServerConnection.send_next_encounter()
 	$StartButton.disabled = true
+	ServerConnection.send_fetch_state()
