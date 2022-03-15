@@ -29,11 +29,12 @@ func set_current_hp(hp):
 	$LifeBar.value = player.current_hp
 	$LifeBar/Life.set_text(str(player.current_hp) + "/" + str(player.max_hp))
 
-func take_hit(dmg):
+func take_damage(dmg, die):
 	if dmg > 0:
 		set_current_hp(player.current_hp - dmg)
 		play_hit_animation()
-
+		#on_hit_effects()
+	
 func play_hit_animation():
 	$Timer.wait_time = 0.2
 	$Timer.start()
