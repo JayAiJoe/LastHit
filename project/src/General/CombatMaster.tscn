@@ -22,6 +22,7 @@ margin_top = 480.0
 margin_right = 960.0
 margin_bottom = 680.0
 rect_min_size = Vector2( 800, 200 )
+custom_constants/separation = 200
 
 [node name="Control" type="Control" parent="."]
 margin_right = 1920.0
@@ -41,10 +42,11 @@ position = Vector2( 1472, 587 )
 position = Vector2( 50, 880 )
 
 [node name="ChatBox" parent="." instance=ExtResource( 8 )]
-margin_left = 8.0
-margin_top = 9.0
-margin_right = 808.0
-margin_bottom = 409.0
+margin_left = 1321.0
+margin_top = 2.0
+margin_right = 2121.0
+margin_bottom = 402.0
+rect_scale = Vector2( 0.75, 0.75 )
 
 [node name="StartButton" type="Button" parent="."]
 margin_left = 1449.0

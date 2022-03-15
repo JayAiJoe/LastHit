@@ -193,6 +193,7 @@ func send_add_creature(creature_id : int, creature_index : int) -> void:
 		_socket.send_match_state_async(_campaign_id, OpCodes.ADD_CREATURE, JSON.print(payload))
 
 func send_turn_id(turn_id : String) -> void:
+	print("turn id sent !!!")
 	if _socket:
 		var payload = {id = get_user_id(), tid = turn_id}
 		_socket.send_match_state_async(_campaign_id, OpCodes.TURN_ID, JSON.print(payload))

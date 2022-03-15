@@ -14,6 +14,7 @@ var boss_sequence
 var next_boss
 var encounter
 var turn_id = ""
+var player_count = 0
 
 var creature_db = {}
 

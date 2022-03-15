@@ -73,7 +73,9 @@ func start_encounter():
 	
 func start_turn():
 	active_character = characters[character_turn_index]
-	active_character.play_turn()
+	ServerConnection.send_turn_id(active_character.id)
+	yield(active_character.play_turn(), "completed")
+	end_turn()
 	
 func end_turn():
 	$TurnQueue.move_queue()
@@ -82,7 +84,7 @@ func end_turn():
 		start_turn()
 	
 func end_encounter():
-	$StartButton.disabled = false
+	#$StartButton.disabled = false
 	$DiceTray.clear_dice()
 	$TurnQueue.on_encounter_end()
 	Global.encounter_end()
@@ -90,15 +92,10 @@ func end_encounter():
 		print("campfire time")
 		$Background.set_texture(load("res://src/Assets/Biomes/campfire.jpg"))
 	else:
-		start_encounter()
+		ServerConnection.send_next_encounter()
 		
 
-func play_turn():
-	active_character = characters[character_turn_index]
-	character_turn_index = (character_turn_index+1)%(characters.size())
-	ServerConnection.send_turn_id(active_character.id)
-	yield(active_character.play_turn(), "completed")
-	$TurnQueue.move_queue()
+
 
 	
 #Chat
@@ -118,7 +115,7 @@ func join_campaign(character_states: Dictionary) -> void:
 	assert(character_states.has(user_id), "Server did not return valid state")
 	for c in character_states:
 		if c != user_id:
-			spawn(c)
+			spawn(c, character_states[c].name)
 			
 	ServerConnection.connect("chat_message_received", self, "_on_chat_message_received")
 	activate_chat()
@@ -138,25 +135,27 @@ func _on_ServerConnection_character_action_received(actor_id : String, action_id
 		if t < 0:
 			var te = -1 - t
 			if te < enemies.size():
-				enemies[te].take_hit(5, dice_value)
+				enemies[te].take_hit(dice_value, dice_value)
 		else:
 			if t < players.size():
-				players[t].take_hit(5)
+				players[t].take_hit(1, dice_value)
 
-func spawn(id : String):
+func spawn(id : String, name : String):
+	Global.player_count += 1
 	var p = TeamSlot.instance()
 	team.add_child(p)
 	var p_sprite = p.get_child(0)
 	p_sprite.id = id
 	p_sprite.add_to_group("Characters")
 	p_sprite.add_to_group("Players")
+	p_sprite.get_node("LifeBar/Name").text = name 
 	players = get_tree().get_nodes_in_group("Players")
 	characters = get_tree().get_nodes_in_group("Characters")
 
 func _on_ServerConnection_character_spawned(id : String, name : String):
-	spawn(id)
+	spawn(id, name)
 	
 func _on_StartButton_pressed():
 	ServerConnection.send_next_encounter()
-	$StartButton.disabled = true
+	$StartButton.queue_free()
 	ServerConnection.send_fetch_state()

@@ -58,7 +58,7 @@ func set_armor_class(ac):
 	$ArmorClass/Armor.text = str(ac)
 
 #called when a die is dropped on this encounter's dropzone
-func take_damage(dmg : int, roll : int):
+func take_hit(dmg : int, roll : int):
 	if roll > creature.armor_class:
 		if roll == 20:
 			set_current_hp(creature.current_hp - dmg*creature.crit_multiplier)
@@ -76,7 +76,7 @@ func play_turn():
 	$Timer.start()
 	yield($Timer, "timeout")
 	if combat_master != null:
-		ServerConnection.send_action("enemy", 1, [0,1], 21)
+		ServerConnection.send_action("enemy", 1, [randi()%Global.player_count], 21)
 
 func play_hit_animation():
 	$Timer.wait_time = 0.2
