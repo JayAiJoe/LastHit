@@ -3,6 +3,7 @@ extends Node2D
 var player
 
 var combat_master = null
+var id = ""
 
 signal end_turn
 
@@ -13,9 +14,8 @@ func _ready():
 	set_current_hp(30)
 	$LifeBar/Life.set_text(str(player.current_hp) + "/" + str(player.max_hp))
 	roll_initiative(1, 1)
-	for a in get_tree().get_nodes_in_group("Actions"):
-		a.connect("trigger", self, "perform_action")
 	combat_master = get_parent()
+	ServerConnection.connect("character_action_received", self, "perform_action")
 
 func roll_initiative(minimum, maximum):
 	player.initiative = randi() % (maximum-minimum+1) + minimum
@@ -53,9 +53,9 @@ func play_turn():
 	yield(self, "end_turn")
 
 ## gets called when a die is played
-func perform_action(roll):
-	print("Hero turn: " + str(roll))
-	emit_signal("end_turn")
+func perform_action(actor_id : String, action_id : int, targets: Array, dice_value : int):
+	if actor_id == id:
+		emit_signal("end_turn")
 	
 func get_sprite_path():
 	return $StaticSprite.texture.resource_path

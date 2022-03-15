@@ -27,9 +27,9 @@ func _ready():
 	ServerConnection.connect("initial_state_received", self, "_on_ServerConnection_initial_state_received")
 	ServerConnection.connect("character_spawned", self, "_on_ServerConnection_character_spawned")
 	ServerConnection.connect("next_encounter", self, "_on_ServerConnection_encounter_started")
-	ServerConnection.connect("normal_attack" , self, "_on_ServerConnection_normal_attack_received")
-	ServerConnection.connect("enemy_action", self, "_on_ServerConnection_enemy_action_received")
-	ServerConnection.send_spawn("player 1")
+	ServerConnection.connect("character_action_received" , self, "_on_ServerConnection_character_action_received")
+	ServerConnection.connect("turn_id_received", self, "_on_ServerConnection_turn_id_received")
+	ServerConnection.send_spawn(ServerConnection.username)
 	
 	
 static func sort_initiative(a, b) -> bool:
@@ -93,7 +93,13 @@ func end_encounter():
 		start_encounter()
 		
 
-	
+func play_turn():
+	active_character = characters[character_turn_index]
+	character_turn_index = (character_turn_index+1)%(characters.size())
+	ServerConnection.send_turn_id(active_character.id)
+	yield(active_character.play_turn(), "completed")
+	$TurnQueue.move_queue()
+
 	
 #Chat
 func activate_chat():
@@ -107,49 +113,50 @@ func _on_chat_message_received(sender_name, text) -> void:
 	
 	
 #In-game Functions
-func join_campaign(state_positions: Dictionary, state_initiatives: Dictionary, state_stats: Dictionary, state_names: Dictionary) -> void:
+func join_campaign(character_states: Dictionary) -> void:
 	var user_id := ServerConnection.get_user_id()
-	assert(state_positions.has(user_id), "Server did not return valid state")
-	var username: String = state_names.get(user_id)
-	var player_position = state_positions[user_id]
-	print(state_names)
-	for n in state_names:
-		if n != user_id:
-			spawn()
+	assert(character_states.has(user_id), "Server did not return valid state")
+	for c in character_states:
+		if c != user_id:
+			spawn(c)
+			
 	ServerConnection.connect("chat_message_received", self, "_on_chat_message_received")
 	activate_chat()
+
 	
 
-func _on_ServerConnection_initial_state_received(positions: Dictionary, initiatives: Dictionary, stats: Dictionary, names: Dictionary) -> void:
+func _on_ServerConnection_initial_state_received(character_states: Dictionary) -> void:
 	ServerConnection.disconnect("initial_state_received", self, "_on_ServerConnection_initial_state_received")
-	join_campaign(positions, initiatives, stats, names)
 
-func _on_ServerConnection_normal_attack_received(id : String, attack : int, dice_value : int):
-	deal_damage(active_character, enemies[0], attack, dice_value)
+	join_campaign(character_states)
 
-func _on_ServerConnection_enemy_action_received(target: int, value: int):
-	deal_damage(enemies[0], players[target-1], value)
-	#pwedeng iba yung icall such as
-	#heal($EnemySprite, $EnemySprite, value)
-	#give_status_effect($EnemySprite, $EnemySprite, value)
-	
-func spawn():
+func _on_ServerConnection_turn_id_received(turn_id : String) -> void:
+	Global.turn_id = turn_id
+
+func _on_ServerConnection_character_action_received(actor_id : String, action_id : int, targets: Array, dice_value : int):
+	for t in targets:
+		if t < 0:
+			var te = -1 - t
+			if te < enemies.size():
+				enemies[te].take_hit(5, dice_value)
+		else:
+			if t < players.size():
+				players[t].take_hit(5)
+
+func spawn(id : String):
 	var p = TeamSlot.instance()
 	team.add_child(p)
-	p.get_child(0).add_to_group("Characters")
-	p.get_child(0).add_to_group("Players")
+	var p_sprite = p.get_child(0)
+	p_sprite.id = id
+	p_sprite.add_to_group("Characters")
+	p_sprite.add_to_group("Players")
 	players = get_tree().get_nodes_in_group("Players")
 	characters = get_tree().get_nodes_in_group("Characters")
 
 func _on_ServerConnection_character_spawned(id : String, name : String):
-	spawn()
+	spawn(id)
 	
 func _on_StartButton_pressed():
 	ServerConnection.send_next_encounter()
 	$StartButton.disabled = true
-	
-#combat stuff
-func deal_damage(attacker, attacked, amount, die=10): #(enemy/player sprite, enemy/player sprite, int)
-	#insert amount modifiers from attacker here
-	attacked.take_damage(amount, die)
-	end_turn()
+	ServerConnection.send_fetch_state()

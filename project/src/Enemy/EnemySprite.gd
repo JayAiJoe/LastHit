@@ -5,6 +5,7 @@ var creature
 var zone_radius = 50
 
 var combat_master = null
+var id = "enemy"
 
 func _ready():
 	randomize()
@@ -75,7 +76,7 @@ func play_turn():
 	$Timer.start()
 	yield($Timer, "timeout")
 	if combat_master != null:
-		ServerConnection.send_enemy_action(randi()%combat_master.players.size()+1, 5)
+		ServerConnection.send_action("enemy", 1, [0,1], 21)
 
 func play_hit_animation():
 	$Timer.wait_time = 0.2

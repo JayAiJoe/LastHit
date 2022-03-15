@@ -44,6 +44,7 @@ func authenticate_user_async(email: String, password: String) -> int:
 		login_register.is_enabled = false
 		play_button.disabled = false
 		username = email.split("@")[0]
+		ServerConnection.username = username
 		#open_character_menu_async()
 	else:
 		login_register.status = "Error code %s: %s" % [result, ServerConnection.error_message]

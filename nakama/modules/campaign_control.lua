@@ -8,21 +8,19 @@ local OpCodes = {
     assign_captain = 1,
     initial_state = 2,
     do_spawn = 3,
-    normal_attack = 4,
-    next_encounter = 5,
-    enemy_action = 6
+    next_encounter = 4,
+    character_action = 5,
+    fetch_state = 6,
+    add_creature = 7,
+    turn_id = 8
 }
-
 
 function campaign_control.match_init(_, _)
     local gamestate = {
         presences = {},
-        positions = {},
-        initiatives = {},
-        stats = {},
-        names = {},
+        characters = {},
         captain_id = nil,
-        current_id = nil
+	    current_id = nil
     }
     local tickrate = 2
     local label = "Campaign"
@@ -41,15 +39,25 @@ end
 function campaign_control.match_join(_, dispatcher, _, state, presences)
     for _, presence in ipairs(presences) do
         state.presences[presence.user_id] = presence
-        state.positions[presence.user_id] = 0
-        state.initiatives[presence.user_id] = 0
-        state.stats[presence.user_id] = {
-            ["chp"] = 30,
-            ["mhp"] = 30,
-            ["atk"] = 5,
-            ["def"] = 0
+
+        local stat_default = {
+            initiative = 0,
+            max_hp = 30,
+            current_hp = 30,
+            shields = 0,
+            atk = 5,
+            armor_class = nil,
+            statuses = {}
         }
-        state.names[presence.user_id] = "User"
+
+        local character = {
+            position = 0,
+            name = "player",
+            stats = stat_default,
+            creatures = {}
+        }
+
+        state.characters[presence.user_id] = character
     end
     return state
 end
@@ -58,10 +66,13 @@ end
 function campaign_control.match_leave(_, _, _, state, presences)
     for _, presence in ipairs(presences) do
         state.presences[presence.user_id] = nil
-        state.positions[presence.user_id] = nil
-        state.initiatives[presence.user_id] = nil
-        state.stats[presence.user_id] = nil
-        state.names[presence.user_id] = nil
+        state.characters[presence.user_id] = nil
+        if captain_id == presence.user_id then
+            captain_id = nil
+        end
+        if current_id == presence.user_id then
+            current_id = nil
+        end
     end
     return state
 end
@@ -71,50 +82,20 @@ function campaign_control.match_loop(_, dispatcher, _, state, messages)
     for _, message in ipairs(messages) do
         local op_code = message.op_code
         local decoded = nk.json_decode(message.data)
+
+
         
         if op_code == OpCodes.assign_captain then
-            if host_id == nil then
+            if captain_id == nil then
                 captain_id = decoded.id
                 current_id = decoded.id
             end
         end
         if op_code == OpCodes.do_spawn then
+            state.characters[decoded.id].name = decoded.nm
+            local encoded = nk.json_encode(state.characters)
 
-            local object_ids = {
-                {
-                    collection = "player_data",
-                    key = "position_" .. decoded.nm,
-                    user_id = message.sender.user_id
-                }
-            }
-
-            local objects = nk.storage_read(object_ids)
-
-            local position
-            for _, object in ipairs(objects) do
-                position = object.value
-                if position ~= nil then
-                    state.positions[message.sender.user_id] = position
-                    break
-                end
-            end
-
-            if position == nil then
-                state.positions[message.sender.user_id] = 0
-            end
-
-            state.names[message.sender.user_id] = decoded.nm
-
-            local data = {
-                ["pos"] = state.positions,
-                ["ini"] = state.initiatives,
-                ["stats"] = state.stats,
-                ["nms"] = state.names
-            }
-
-            local encoded = nk.json_encode(data)
             dispatcher.broadcast_message(OpCodes.initial_state, encoded, {message.sender})
-
             dispatcher.broadcast_message(OpCodes.do_spawn, message.data)
         end
         if op_code == OpCodes.next_encounter then
@@ -122,14 +103,23 @@ function campaign_control.match_loop(_, dispatcher, _, state, messages)
                 dispatcher.broadcast_message(OpCodes.next_encounter, message.data)
             end
         end
-        if op_code == OpCodes.normal_attack then
+        if op_code == OpCodes.character_action then
             if decoded.id == current_id then
-                dispatcher.broadcast_message(OpCodes.normal_attack, message.data)
+                dispatcher.broadcast_message(OpCodes.character_action, message.data)
             end
         end
-        if op_code == OpCodes.enemy_action then
+        if op_code == OpCodes.fetch_state then
+            local encoded = nk.json_encode(state)
+            dispatcher.broadcast_message(OpCodes.fetch_state, encoded)
+        end
+        if op_code == OpCodes.add_creature then
+            state.characters[decoded.id].creatures[decoded.ind] = decoded.ctr
+            dispatcher.broadcast_message(OpCodes.add_creature, message.data)
+        end
+        if op_code == OpCodes.turn_id then
             if decoded.id == captain_id then
-                dispatcher.broadcast_message(OpCodes.enemy_action, message.data)
+                current_id = decoded.tid
+                dispatcher.broadcast_message(OpCodes.turn_id, message.data)
             end
         end
     end
